@@ -1,0 +1,65 @@
+name: Deploy
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: "☁️ Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "📦 Install pnpm"
+        uses: pnpm/action-setup@v4
+        with:
+          version: "11.3.0"
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: "📦 Install dependencies"
+        run: pnpm install --frozen-lockfile
+
+      # Lint / format are enforced by ci.yml on pull requests;
+      # deploy only builds (pnpm build already runs astro check).
+      - name: "🚀 Build the project"
+        run: pnpm run build
+
+      - name: "🚚 Rsync dist/ to server"
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          mkdir -p ~/.ssh
+          key_file="$(mktemp)"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$key_file"
+          chmod 600 "$key_file"
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts
+          rsync -az --delete -e "ssh -i $key_file -p $SSH_PORT" dist/ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
+          rm -f "$key_file"
+
+      - name: "✅ Verify site is up"
+        run: |
+          status="$(curl -sS -o /dev/null -w '%{http_code}' https://blog.luochuanji.com/)"
+          echo "HTTP $status"
+          test "$status" = "200"
