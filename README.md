@@ -1,166 +1,153 @@
-# AstroPaper 📄
+# 洛川集
 
-![AstroPaper](public/default-og.jpg)
-[![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/community/file/1356898632249991861)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
+> 枫落于川，川流成集；逝者如斯，而未尝往也。
 
-AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro blog theme. This theme is designed and crafted based on [my personal blog](https://satnaing.dev/blog).
+[洛川集](https://blog.luochuanji.com) 是 fengluochuan 的个人博客，基于
+[AstroPaper](https://github.com/satnaing/astro-paper) 主题二次开发（Astro +
+TypeScript + TailwindCSS + Pagefind），纯静态部署在自有服务器上。
 
-Read [the blog posts](https://astro-paper.pages.dev/posts/) or check [the README Documentation Section](#-documentation) for more info.
+站点收录两类内容：
 
-## 🔥 Features
+- **文章**（`/posts/`）：Markdown/MDX 直写的常规博文
+- **论文精读**（`/research/`）：由 [paper2html](.claude/skills/paper2html/) 生成、经导入器模板化的单页论文精读
 
-- [x] type-safe markdown
-- [x] super fast performance
-- [x] accessible (Keyboard/VoiceOver)
-- [x] responsive (mobile ~ desktops)
-- [x] SEO-friendly
-- [x] light & dark mode
-- [x] static search ([Pagefind](https://pagefind.app/))
-- [x] draft posts & pagination
-- [x] sitemap & rss feed
-- [x] MDX support
-- [x] collapsible table of contents
-- [x] followed best practices
-- [x] highly customizable
-- [x] dynamic OG image generation for blog posts ([Blog Post](https://astro-paper.pages.dev/posts/dynamic-og-image-generation-in-astropaper-blog-posts/))
-- [x] i18n ready
+两类内容统一出现在首页列表、标签页、RSS 与全文搜索中。
 
-_Note: I've tested screen-reader accessibility of AstroPaper using **VoiceOver** on Mac and **TalkBack** on Android. I couldn't test all other screen-readers out there. However, accessibility enhancements in AstroPaper should be working fine on others as well._
+## 写作流程一：Markdown 文章
 
-## ✅ Lighthouse Score
+在 `src/content/posts/` 下新建 `.md`（或 `.mdx`）文件即可，子目录名会成为 URL 的一部分。frontmatter 字段（以 `src/content.config.ts` 为准）：
 
-<p align="center">
-  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
-    <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
-  </a>
-</p>
+| 字段          | 必填 | 说明                                               |
+| ------------- | ---- | -------------------------------------------------- |
+| `title`       | 是   | 文章标题                                           |
+| `description` | 是   | 摘要，用于列表、SEO 与 OG 图                       |
+| `pubDatetime` | 是   | 发布时间，如 `2026-07-10T09:00:00+08:00`           |
+| `modDatetime` | 否   | 最后修改时间                                       |
+| `tags`        | 否   | 标签数组，默认 `["others"]`                        |
+| `draft`       | 否   | `true` 时构建不发布（dev 下可预览）                |
+| `featured`    | 否   | `true` 时进入首页「精选」区                        |
+| `comments`    | 否   | 默认 `true`；设为 `false` 关闭本篇 giscus 评论     |
+| `ogImage`     | 否   | 自定义 OG 图；缺省时构建期自动生成                 |
+| `author`      | 否   | 默认取站点配置中的作者                             |
+| `timezone`    | 否   | 覆盖单篇文章的 IANA 时区（站点默认 Asia/Shanghai） |
 
-## 🚀 Project Structure
+示例：
 
-Inside of AstroPaper, you'll see the following folders and files:
-
-```bash
-/
-├── public/
-│   ├── pagefind/          # auto-generated on build
-│   ├── favicon.svg
-│   └── default-og.jpg
-├── src/
-│   ├── assets/
-│   │   ├── icons/
-│   │   └── images/
-│   ├── components/
-│   ├── content/
-│   │   ├── pages/
-│   │   │   └── about.md
-│   │   └── posts/
-│   │       └── some-blog-posts.md
-│   ├── i18n/
-│   ├── layouts/
-│   ├── pages/
-│   ├── scripts/
-│   ├── styles/
-│   ├── types/
-│   ├── utils/
-│   ├── config.ts
-│   └── content.config.ts
-├── astro-paper.config.ts  # user-defined configurations
-└── astro.config.ts
-```
-
-All blog posts are stored in the `src/content/posts/` directory. You can organise posts into subdirectories — the subdirectory name becomes part of the post URL.
-
-## 📖 Documentation
-
-Documentation can be read in two formats\_ _markdown_ & _blog post_.
-
-- Configuration - [markdown](src/content/posts/how-to-configure-astropaper-theme.md) | [blog post](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
-- Add Posts - [markdown](src/content/posts/adding-new-post.md) | [blog post](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
-- Customize Color Schemes - [markdown](src/content/posts/customizing-astropaper-theme-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
-- Predefined Color Schemes - [markdown](src/content/posts/predefined-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
-
-## 💻 Tech Stack
-
-**Main Framework** - [Astro](https://astro.build/)  
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)  
-**Styling** - [TailwindCSS](https://tailwindcss.com/)  
-**UI/UX** - [Figma Design File](https://www.figma.com/community/file/1356898632249991861)  
-**Static Search** - [Pagefind](https://pagefind.app/)  
-**Icons** - [Tablers](https://tabler-icons.io/)  
-**Code Formatting** - [Prettier](https://prettier.io/)  
-**Deployment** - [Cloudflare Pages](https://pages.cloudflare.com/)  
-**Linting** - [ESLint](https://eslint.org)  
-**Dynamic OG images** - [Satori](https://github.com/vercel/satori) + [Sharp](https://sharp.pixelplumbing.com/) + [Astro Fonts](https://docs.astro.build/en/guides/fonts/)
-
-## 👨🏻‍💻 Running Locally
-
-You can start using this project locally by running the following command in your desired directory:
-
-```bash
-# pnpm
-pnpm create astro@latest --template satnaing/astro-paper
-
-# npm
-npm create astro@latest -- --template satnaing/astro-paper
-
-# yarn
-yarn create astro --template satnaing/astro-paper
-
-# bun
-bun create astro@latest -- --template satnaing/astro-paper
-```
-
-Then start the project by running the following commands:
-
-```bash
-# install dependencies if you haven't done so in the previous step.
-pnpm install
-
-# start running the project
-pnpm dev
-```
-
-## Google Site Verification (optional)
-
-You can add your [Google Site Verification HTML tag](https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag) by setting `site.googleVerification` in `astro-paper.config.ts`:
-
-```ts file="astro-paper.config.ts"
-export default defineAstroPaperConfig({
-  site: {
-    // ...
-    googleVerification: "your-google-site-verification-value",
-  },
-  // ...
-});
-```
-
-> See [this discussion](https://github.com/satnaing/astro-paper/discussions/334#discussioncomment-10139247) for adding AstroPaper to the Google Search Console.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command          | Action                                                                                                                           |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`   | Installs dependencies                                                                                                            |
-| `pnpm dev`       | Starts local dev server at `localhost:4321`                                                                                      |
-| `pnpm build`     | Type-checks, builds the site, runs Pagefind indexing, and copies the index to `public/pagefind/`                                 |
-| `pnpm preview`   | Preview your build locally, before deploying                                                                                     |
-| `pnpm sync`      | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
-| `pnpm astro ...` | Run CLI commands like `astro add`, `astro check`                                                                                 |
-
-## ✨ Feedback & Suggestions
-
-If you have any suggestions/feedback, you can contact me via [my email](mailto:satnaingdev+astropaper@gmail.com). Alternatively, feel free to open an issue if you find bugs or want to request new features.
-
-## 📜 License
-
-Licensed under the MIT License, Copyright © 2026
-
+```yaml
 ---
+title: 洛川集开篇
+description: 这个站点为什么存在。
+pubDatetime: 2026-07-10T09:00:00+08:00
+tags:
+  - 随笔
+---
+```
 
-Made with 🤍 by [Sat Naing](https://satnaing.dev) 👨🏻‍💻 and [contributors](https://github.com/satnaing/astro-paper/graphs/contributors).
+本地 `pnpm dev` 预览，push 到 `main` 即自动构建发布。
+
+## 写作流程二：paper2html 论文精读页
+
+paper2html 产出的单文件 `index.html` 通过仓库内置导入器进入站点，成为共享站点导航、明暗模式与评论区的精读页。
+
+### 发布契约（paper2html skill 侧使用）
+
+paper2html 的 `publish_paper2html.sh` 依赖以下环境变量指向本仓库：
+
+```bash
+export PAPER2HTML_BLOG_ROOT=/path/to/本仓库
+export PAPER2HTML_PUBLIC_BASE_URL=https://blog.luochuanji.com/research
+export PAPER2HTML_DEPLOY_WORKFLOW=deploy.yml
+```
+
+### 导入命令（本仓库提供）
+
+```bash
+# 导入 + 本地检查（推荐先跑这一步）
+pnpm research:publish /path/to/index.html \
+  --to nlp/transformer/attention-is-all-you-need \
+  --title "Attention Is All You Need 精读" \
+  --description "Transformer 原始论文逐节精读" \
+  --tags 论文精读,NLP \
+  --check
+
+# 只校验参数与目标路径，不落盘
+pnpm research:publish /path/to/index.html --to topic/slug --dry-run
+
+# 导入 + format + check + 只提交本次精读文件 + push（触发自动部署）
+pnpm research:publish /path/to/index.html --to topic/slug --ship
+```
+
+- `--to topic[/series]/slug`：目标路径，`series` 层级可省略
+- 其余可选参数：`--date YYYY-MM-DD`、`--topic-title`、`--series-title`、`--source <论文链接>`、`--comments false`（关闭本页评论）、`--message`（`--ship` 的 commit message）
+- `--ship` / `--check` / `--dry-run` 三种模式至多选一
+- `--allow-private-evidence`：放行 `file://` 等本地引用（公开页面应避免）
+- 元数据优先级：命令行参数 > HTML 内 `<title>` / `<meta>` 兜底
+
+### 落盘与 URL 规则
+
+导入后每页生成一个目录：
+
+```
+src/data/research/<topic>[/<series>]/<slug>/
+├── meta.json      # 标题、日期、标签等元数据
+├── content.html   # 作用域化后的正文
+└── styles.css     # 选择器统一加 .paper-root 前缀，与主题样式互不污染
+```
+
+对应页面 URL 为 `https://blog.luochuanji.com/research/<topic>[/<series>]/<slug>/`。
+
+### 校验
+
+```bash
+# 本地结构校验
+pnpm research verify nlp/transformer/attention-is-all-you-need
+
+# 追加公网 URL 可达性检查（部署后）
+pnpm research verify nlp/transformer/attention-is-all-you-need --remote
+```
+
+## 本地开发
+
+环境要求：Node >= 22.12、pnpm。
+
+```bash
+pnpm install        # 安装依赖
+pnpm dev            # 本地开发服务器（localhost:4321）
+pnpm build          # astro check + 构建 + Pagefind 索引
+pnpm preview        # 预览构建产物
+pnpm lint           # ESLint
+pnpm format:check   # Prettier 检查（pnpm format 自动修复）
+```
+
+注意：Astro 7 的 `dev` 以守护进程方式常驻运行，关闭终端不会停止它；用 `pnpm astro dev status` 查看状态、`pnpm astro dev stop` 停止。
+
+## 部署
+
+- **自动**：push `main` 后 GitHub Actions（`.github/workflows/deploy.yml`）自动 `pnpm build` 并将 `dist/` rsync 到自有服务器；连接信息全部存放于仓库 Secrets（`SSH_HOST` / `SSH_PORT` / `SSH_USER` / `SSH_PRIVATE_KEY` / `DEPLOY_PATH`），不落仓库。
+- **手动兜底**：CI 不可用时在本地运行 `./scripts/deploy.sh`（本地构建 + 同一条 rsync + 部署后 HTTP 200 验证）。
+- **服务器侧**：既有 nginx 新增独立 vhost 提供静态托管，certbot 签发并自动续期 HTTPS 证书；服务器不承担任何动态后端职责。
+
+## 评论
+
+评论基于 [giscus](https://giscus.app/zh-CN)（GitHub Discussions 的
+Announcements 分类作后端，无服务器），文章页与精读页均挂载，主题跟随站点明暗模式切换。
+
+- 全站配置集中在 `astro-paper.config.ts` 的 `giscus` 块，删除该块即全站关闭
+- 单篇关闭：文章 frontmatter 写 `comments: false`；精读页导入时加 `--comments false`（或改 `meta.json` 中的 `comments`）
+
+## 相对上游 AstroPaper 的定制
+
+定制以「新增文件为主、少改核心」为原则，便于跟随上游更新：
+
+- **research 内容体系**：`research` content collection（`src/content.config.ts`）+ 动态路由 `src/pages/research/[...id].astro` + `PaperLayout.astro`（站点壳 + `.paper-root` 样式隔离 + 本地 vendored KaTeX，不走 CDN）
+- **导入器**：`scripts/research/`，实现上文的 paper2html 发布契约
+- **统一列表流**：`getAllEntries()` 合并 posts + research，首页、标签页、RSS、Pagefind 搜索统一收录，精读条目带「论文精读」标识
+- **giscus 评论组件**：懒加载、明暗联动、单篇可关
+- **中文化**：界面文案、`zh` 语言与 Asia/Shanghai 时区
+- **部署链路**：GitHub Actions rsync 发布 + `scripts/deploy.sh` 手动兜底
+
+## License
+
+本仓库沿用上游的 [MIT License](LICENSE)。主题来自
+[satnaing/astro-paper](https://github.com/satnaing/astro-paper)，感谢
+[Sat Naing](https://satnaing.dev) 与各位贡献者。博客文章与精读页内容版权归作者所有。
