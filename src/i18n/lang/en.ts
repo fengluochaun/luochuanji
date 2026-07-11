@@ -41,6 +41,9 @@ export default {
     badge: "Paper Notes",
     sourceLabel: "Source",
   },
+  comments: {
+    title: "Comments",
+  },
   pages: {
     tagTitle: "Tag",
     tagDesc: "All the articles with the tag",

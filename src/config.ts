@@ -36,6 +36,13 @@ const config: ResolvedAstroPaperConfig = {
   },
   socials: userConfig.socials ?? [],
   shareLinks: userConfig.shareLinks ?? [],
+  giscus: userConfig.giscus
+    ? {
+        ...userConfig.giscus,
+        mapping: userConfig.giscus.mapping ?? "pathname",
+        lang: userConfig.giscus.lang ?? "zh-CN",
+      }
+    : null,
 };
 
 export default config;

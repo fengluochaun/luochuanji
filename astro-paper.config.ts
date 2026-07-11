@@ -28,6 +28,16 @@ export default defineAstroPaperConfig({
     search: "pagefind",
   },
   socials: [{ name: "github", url: "https://github.com/fengluochaun" }],
+  // giscus 评论（GitHub Discussions 后端）；删除此块即全站关闭评论。
+  // 单篇关闭：posts frontmatter / research meta.json 里设 `comments: false`。
+  giscus: {
+    repo: "fengluochaun/luochuanji",
+    repoId: "R_kgDOTUeaig",
+    category: "Announcements",
+    categoryId: "DIC_kwDOTUeais4DA6K9",
+    mapping: "pathname",
+    lang: "zh-CN",
+  },
   shareLinks: [
     { name: "whatsapp", url: "https://wa.me/?text=" },
     { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },

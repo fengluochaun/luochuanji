@@ -41,6 +41,9 @@ export default {
     badge: "论文精读",
     sourceLabel: "原文链接",
   },
+  comments: {
+    title: "评论",
+  },
   pages: {
     tagTitle: "标签",
     tagDesc: "所有带该标签的文章",

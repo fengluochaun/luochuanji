@@ -31,6 +31,8 @@ Forwarded metadata (CLI wins over <title>/<meta> fallbacks in the HTML):
   --topic-title "中文课题名"
   --series-title "中文系列名"
   --source "https://..."
+  --comments true|false      Per-page giscus toggle in meta.json (default: true;
+                             only written when false)
   --message "commit message" Used by --ship
 
 Modes (at most one):
@@ -58,6 +60,7 @@ const PUBLISH_VALUE_OPTIONS = new Map([
   ["--topic-title", "topicTitle"],
   ["--series-title", "seriesTitle"],
   ["--source", "source"],
+  ["--comments", "comments"],
   ["--message", "message"],
 ]);
 

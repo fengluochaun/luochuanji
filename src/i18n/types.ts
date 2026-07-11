@@ -39,6 +39,9 @@ export interface UIStrings {
     badge: string;
     sourceLabel: string;
   };
+  comments: {
+    title: string;
+  };
   pages: {
     tagTitle: string;
     tagDesc: string;

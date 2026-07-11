@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
+import Comments from "@/components/Comments.astro";
 import { slugifyStr } from "@/utils/slugify";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -189,6 +190,8 @@ const contextLine = [topicTitle, seriesTitle].filter(Boolean).join(" · ");
 
     <div class="paper-root" set:html={contentHtml} />
   </main>
+
+  <Comments comments={entry.data.comments} />
 
   <Footer />
 </Layout>

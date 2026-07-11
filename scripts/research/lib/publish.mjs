@@ -56,6 +56,21 @@ function parseTags(rawTags) {
   ];
 }
 
+/**
+ * Resolve the per-page comments toggle. Defaults to enabled (true); only an
+ * explicit `--comments false` disables it. The `true` case is omitted from
+ * meta.json so the collection default (true) applies and files stay minimal.
+ */
+function resolveComments(rawComments) {
+  if (rawComments === undefined) return undefined;
+  const value = rawComments.trim().toLowerCase();
+  if (value === "false" || value === "0" || value === "no") return false;
+  if (value === "true" || value === "1" || value === "yes") return undefined;
+  throw new UsageError(
+    `--comments must be true or false, got: ${rawComments}`
+  );
+}
+
 /** Resolve final metadata: CLI arguments win, HTML head values are fallbacks. */
 function resolveMeta(options, htmlMeta) {
   const title = options.title ?? htmlMeta.title;
@@ -72,6 +87,7 @@ function resolveMeta(options, htmlMeta) {
   }
 
   const tags = parseTags(options.tags ?? htmlMeta.tags ?? "");
+  const comments = resolveComments(options.comments);
 
   if (options.source !== undefined && !/^https?:\/\//i.test(options.source)) {
     warn(`--source does not look like an http(s) URL: ${options.source}`);
@@ -87,6 +103,7 @@ function resolveMeta(options, htmlMeta) {
     ...(options.seriesTitle !== undefined && {
       seriesTitle: options.seriesTitle,
     }),
+    ...(comments === false && { comments: false }),
     importedAt: new Date().toISOString(),
   };
 }

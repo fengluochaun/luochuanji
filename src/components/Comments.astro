@@ -1,0 +1,48 @@
+---
+/**
+ * giscus 评论区（GitHub Discussions 后端）。
+ *
+ * 配置集中在 `astro-paper.config.ts` 的 `giscus` 块（repo / repoId / category /
+ * categoryId / mapping / lang）；本组件只从解析后的 `config.giscus` 读取，不硬编码 id。
+ *
+ * 渲染条件（任一不满足则不输出任何标记）：
+ * - 全站开关：`config.giscus` 存在（用户在 config 里配置了 giscus 块）
+ * - 单篇开关：`comments` prop 为 true（posts frontmatter / research meta 默认 true）
+ *
+ * 明暗联动与懒加载逻辑见 `src/scripts/comments.ts`。
+ */
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+type Props = {
+  /** 单篇开关：false 时不渲染评论区。默认 true。 */
+  comments?: boolean;
+};
+
+const { comments = true } = Astro.props;
+const { giscus } = config;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const enabled = giscus !== null && comments;
+---
+
+{
+  enabled && (
+    <section
+      id="comments"
+      class="app-layout mt-8 mb-8"
+      data-pagefind-ignore
+      data-giscus-repo={giscus.repo}
+      data-giscus-repo-id={giscus.repoId}
+      data-giscus-category={giscus.category}
+      data-giscus-category-id={giscus.categoryId}
+      data-giscus-mapping={giscus.mapping}
+      data-giscus-lang={giscus.lang}
+    >
+      <h2 class="text-accent mb-4 text-xl font-semibold">{t.comments.title}</h2>
+      <div class="giscus" />
+      <script>import "@/scripts/comments";</script>
+    </section>
+  )
+}

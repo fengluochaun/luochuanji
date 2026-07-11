@@ -62,6 +62,9 @@ export async function verifyLocal(researchPath) {
         "meta.json: `tags` must be a non-empty array of non-empty strings"
       );
     }
+    if (meta.comments !== undefined && typeof meta.comments !== "boolean") {
+      problems.push("meta.json: `comments` must be a boolean when present");
+    }
   }
 
   const contentPath = path.join(dir, "content.html");

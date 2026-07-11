@@ -24,6 +24,8 @@ const posts = defineCollection({
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
+      /** Per-post giscus toggle; `comments: false` hides the comment section. */
+      comments: z.boolean().default(true),
     }),
 });
 
@@ -57,6 +59,8 @@ const research = defineCollection({
     topicTitle: z.string().optional(),
     seriesTitle: z.string().optional(),
     importedAt: z.string().optional(),
+    /** Per-page giscus toggle; `comments: false` hides the comment section. */
+    comments: z.boolean().default(true),
   }),
 });
 

@@ -92,6 +92,21 @@ interface ShareLink {
   linkTitle?: string;
 }
 
+interface GiscusConfig {
+  /** GitHub repository hosting the Discussions, e.g. "owner/repo" */
+  repo: string;
+  /** giscus repo id (from giscus.app) */
+  repoId: string;
+  /** Discussion category name, e.g. "Announcements" */
+  category: string;
+  /** giscus category id (from giscus.app) */
+  categoryId: string;
+  /** How the page maps to a discussion. Defaults to "pathname". */
+  mapping?: string;
+  /** giscus UI language. Defaults to "zh-CN". */
+  lang?: string;
+}
+
 interface AstroPaperConfig {
   site: SiteConfig;
   posts?: PostsConfig;
@@ -100,6 +115,11 @@ interface AstroPaperConfig {
   socials?: SocialLink[];
   /** Share links shown on post detail pages */
   shareLinks?: ShareLink[];
+  /**
+   * giscus comments (GitHub Discussions backend). Omit to disable comments
+   * site-wide. Per-entry opt-out via `comments: false` frontmatter/meta.
+   */
+  giscus?: GiscusConfig;
 }
 
 type ResolvedSiteConfig = Required<
@@ -123,6 +143,8 @@ export interface ResolvedAstroPaperConfig {
   features: Required<FeaturesConfig>;
   socials: SocialLink[];
   shareLinks: ShareLink[];
+  /** null = comments disabled site-wide */
+  giscus: Required<GiscusConfig> | null;
 }
 
 /**
