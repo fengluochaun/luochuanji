@@ -48,17 +48,81 @@ const paperResetCss = `
  * - The standalone page reserves top padding for its own fixed navbar, which
  *   the importer strips — the site header sits above the paper in normal
  *   flow instead, so the reserved space is reduced.
- *
- * Note on dark mode: paper2html pages are designed as light "paper sheets"
- * (`:root` palette is light-only), so the paper area intentionally keeps its
- * own light look while the surrounding site shell follows the theme.
  */
 const siteHarmonizationCss = `
 /* site-shell harmonization (see PaperLayout.astro) */
 .paper-root .hero { padding-top: 48px; }
 `;
 
-const scopedCss = `${paperResetCss}\n${paperCss}\n${siteHarmonizationCss}`;
+/**
+ * Dark-mode layer for imported paper2html pages — GENERAL, not per-page.
+ * Every page rendered through this layout inherits it, so future imports get
+ * dark support with no re-import and no edits to the generated styles.css.
+ *
+ * How it works:
+ * 1. Variable override — the cheatsheet template drives its core palette from
+ *    CSS custom properties on `.paper-root` (--bg/--paper/--ink/--muted/--line/
+ *    --blue/--shadow). Re-declaring them under `html[data-theme="dark"]
+ *    .paper-root` (higher specificity than the template's `.paper-root`) recolors
+ *    the whole trunk: page/card surfaces, body text, borders, links, shadow.
+ * 2. Property-level overrides — a handful of template classes hardcode light
+ *    colors that no variable reaches (badge chips, card/metric hairline borders,
+ *    callout/formula/table/figure surfaces, `.lead` text). These are stable
+ *    class names from `assets/cheatsheet-template.html` (the paper2html output
+ *    contract), so targeting them here covers every template-based page.
+ *
+ * Palette is tuned to the AstroPaper dark theme in `src/styles/theme.css`
+ * (--background #212737, --foreground #eaedf3, --muted #343f60,
+ * --muted-foreground #afb9ca): a blue-slate family, never pure black, so the
+ * paper reads as part of the site rather than a foreign light panel.
+ *
+ * No-flash: the layer is plain CSS keyed on `html[data-theme]`, which the
+ * inline FOUC script in Layout.astro sets before first paint — dark renders
+ * directly with no white flash. KaTeX inherits `color` from `--ink`, so
+ * formulas stay legible; data-URI images are left untouched (only their
+ * `figure` container surface adapts).
+ */
+const paperDarkCss = `
+html[data-theme="dark"] .paper-root {
+  --bg: #212737;
+  --paper: #2b3347;
+  --ink: #eaedf3;
+  --muted: #a6b0c3;
+  --line: #394155;
+  --blue: #6ea8e6;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+html[data-theme="dark"] .paper-root .badge {
+  background: rgba(110, 168, 230, 0.16);
+  color: #9ec5f0;
+}
+html[data-theme="dark"] .paper-root .badge.gray {
+  background: rgba(255, 255, 255, 0.08);
+  color: #c3ccdb;
+}
+html[data-theme="dark"] .paper-root .metric,
+html[data-theme="dark"] .paper-root section.card {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+html[data-theme="dark"] .paper-root .callout,
+html[data-theme="dark"] .paper-root .mini-card,
+html[data-theme="dark"] .paper-root .ref,
+html[data-theme="dark"] .paper-root .formula,
+html[data-theme="dark"] .paper-root figcaption {
+  background: #262e40;
+}
+html[data-theme="dark"] .paper-root figure {
+  background: var(--paper);
+}
+html[data-theme="dark"] .paper-root th {
+  background: #2f3850;
+}
+html[data-theme="dark"] .paper-root .lead {
+  color: #d4d9e3;
+}
+`;
+
+const scopedCss = `${paperResetCss}\n${paperCss}\n${siteHarmonizationCss}\n${paperDarkCss}`;
 
 const structuredData = {
   "@context": "https://schema.org",
