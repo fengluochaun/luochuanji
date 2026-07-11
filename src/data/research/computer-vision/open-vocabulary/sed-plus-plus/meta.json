@@ -1,0 +1,16 @@
+{
+  "title": "SED++：更强的开放词汇语义分割 Encoder–Decoder",
+  "description": "TPAMI 2026 论文 SED++ 深读：层次 CLIP 代价图、渐进融合解码、类别早期拒绝与 non-label 嵌入，兼顾开放词汇分割精度与速度，并扩展到视频。",
+  "date": "2026-07-11",
+  "tags": [
+    "论文精读",
+    "open-vocabulary",
+    "semantic-segmentation",
+    "CLIP",
+    "computer-vision"
+  ],
+  "source": "https://doi.org/10.1109/TPAMI.2025.3626757",
+  "topicTitle": "计算机视觉",
+  "seriesTitle": "开放词汇分割",
+  "importedAt": "2026-07-11T14:39:04.769Z"
+}
