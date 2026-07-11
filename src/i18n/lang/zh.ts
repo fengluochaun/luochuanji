@@ -37,6 +37,10 @@ export default {
     copyright: "版权所有",
     allRightsReserved: "保留所有权利。",
   },
+  research: {
+    badge: "论文精读",
+    sourceLabel: "原文链接",
+  },
   pages: {
     tagTitle: "标签",
     tagDesc: "所有带该标签的文章",

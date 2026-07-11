@@ -18,5 +18,10 @@ export default [
     },
   },
   { rules: { "no-console": "error" } },
+  {
+    // The research importer is a CLI tool — console output is its UI.
+    files: ["scripts/**/*.mjs"],
+    rules: { "no-console": "off" },
+  },
   { ignores: ["dist/**", ".astro/**", "public/pagefind/**", "smartsearch/**"] },
 ];

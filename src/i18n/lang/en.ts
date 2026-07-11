@@ -37,6 +37,10 @@ export default {
     copyright: "Copyright",
     allRightsReserved: "All rights reserved.",
   },
+  research: {
+    badge: "Paper Notes",
+    sourceLabel: "Source",
+  },
   pages: {
     tagTitle: "Tag",
     tagDesc: "All the articles with the tag",

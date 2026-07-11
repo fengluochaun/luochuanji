@@ -1,0 +1,134 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Layout from "./Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Datetime from "@/components/Datetime.astro";
+import Tag from "@/components/Tag.astro";
+import { slugifyStr } from "@/utils/slugify";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import "katex/dist/katex.min.css";
+
+type Props = {
+  entry: CollectionEntry<"research">;
+  /** Paper body markup produced by `pnpm research:publish` (script-free). */
+  contentHtml: string;
+  /** Paper CSS already scoped under `.paper-root` by the importer. */
+  paperCss: string;
+};
+
+const { entry, contentHtml, paperCss } = Astro.props;
+const { title, description, date, tags, source, topicTitle, seriesTitle } =
+  entry.data;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+/**
+ * Compensating reset — injected BEFORE the paper's own scoped CSS so the paper
+ * always wins, but AFTER Tailwind Preflight (loaded via global.css in
+ * Layout.astro). Preflight neutralises headings, lists and links globally;
+ * paper2html pages assume browser defaults for anything they don't style, so
+ * we restore those defaults inside `.paper-root` only.
+ */
+const paperResetCss = `
+/* restore browser defaults Tailwind Preflight strips (see PaperLayout.astro) */
+.paper-root :where(h1, h2, h3, h4, h5, h6) { font-weight: bold; }
+.paper-root :where(ul) { list-style: disc; }
+.paper-root :where(ol) { list-style: decimal; }
+.paper-root :where(ul, ol):not([class]) { padding-inline-start: 1.5em; }
+.paper-root :where(a[href]) { color: var(--blue, #0066cc); text-decoration: underline; }
+`;
+
+/**
+ * Site-shell harmonization, appended AFTER the scoped paper styles so it wins
+ * by source order at equal specificity:
+ *
+ * - The standalone page reserves top padding for its own fixed navbar, which
+ *   the importer strips — the site header sits above the paper in normal
+ *   flow instead, so the reserved space is reduced.
+ *
+ * Note on dark mode: paper2html pages are designed as light "paper sheets"
+ * (`:root` palette is light-only), so the paper area intentionally keeps its
+ * own light look while the surrounding site shell follows the theme.
+ */
+const siteHarmonizationCss = `
+/* site-shell harmonization (see PaperLayout.astro) */
+.paper-root .hero { padding-top: 48px; }
+`;
+
+const scopedCss = `${paperResetCss}\n${paperCss}\n${siteHarmonizationCss}`;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  datePublished: date.toISOString(),
+  author: [
+    {
+      "@type": "Person",
+      name: config.site.author,
+      ...(config.site.profile && { url: config.site.profile }),
+    },
+  ],
+};
+
+const contextLine = [topicTitle, seriesTitle].filter(Boolean).join(" · ");
+---
+
+<Layout title={`${title} | ${config.site.title}`} description={description}>
+  <Fragment slot="head">
+    <!-- Article meta for research pages -->
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content={date.toISOString()} />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData)}
+    />
+    <!-- Paper styles: pre-scoped under .paper-root by the research importer -->
+    <style is:inline set:html={scopedCss}></style>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content" class="w-full" data-pagefind-body>
+    <div class="app-layout pt-6 sm:pt-8">
+      <div
+        class="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-2 text-sm"
+      >
+        <span
+          class="border-accent/40 text-accent rounded-full border px-2 py-0.5 text-xs font-medium"
+        >
+          {t.research.badge}
+        </span>
+        <Datetime pubDatetime={date} size="lg" />
+        {contextLine && <span>{contextLine}</span>}
+        {
+          source && (
+            <a
+              href={source}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-accent underline decoration-dashed underline-offset-4"
+            >
+              {t.research.sourceLabel}
+            </a>
+          )
+        }
+      </div>
+      <ul class="mt-4 mb-2 flex flex-wrap gap-3">
+        {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+      </ul>
+    </div>
+
+    <div class="paper-root" set:html={contentHtml} />
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  import "@/scripts/render-paper-math";
+</script>

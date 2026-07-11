@@ -5,6 +5,9 @@ import config from "@/config";
 
 export const BLOG_PATH = "src/content/posts";
 
+/** Imported paper2html research pages (written by `pnpm research:publish`). */
+export const RESEARCH_PATH = "src/data/research";
+
 const posts = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${BLOG_PATH}` }),
   schema: ({ image }) =>
@@ -34,4 +37,27 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, pages };
+/**
+ * Paper2html 精读页：每页一个目录
+ * `src/data/research/<topic>[/<series>]/<slug>/{meta.json, content.html, styles.css}`，
+ * entry id 即 `topic[/series]/slug`，与 `/research/<id>/` 路由一一对应。
+ */
+const research = defineCollection({
+  loader: glob({
+    pattern: "**/meta.json",
+    base: `./${RESEARCH_PATH}`,
+    generateId: ({ entry }) => entry.replace(/\/meta\.json$/, ""),
+  }),
+  schema: z.object({
+    title: z.string().min(1),
+    description: z.string().default(""),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default(["论文精读"]),
+    source: z.string().optional(),
+    topicTitle: z.string().optional(),
+    seriesTitle: z.string().optional(),
+    importedAt: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, pages, research };

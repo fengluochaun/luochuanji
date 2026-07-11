@@ -35,6 +35,10 @@ export interface UIStrings {
     copyright: string;
     allRightsReserved: string;
   };
+  research: {
+    badge: string;
+    sourceLabel: string;
+  };
   pages: {
     tagTitle: string;
     tagDesc: string;

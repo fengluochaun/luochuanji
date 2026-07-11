@@ -1,0 +1,31 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import PaperLayout from "@/layouts/PaperLayout.astro";
+import { RESEARCH_PATH } from "@/content.config";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("research");
+  return entries.map(entry => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+type Props = {
+  entry: CollectionEntry<"research">;
+};
+
+const { entry } = Astro.props;
+
+// content.html / styles.css live next to the entry's meta.json — read them at
+// build time (this route is fully static).
+const paperDir = path.join(process.cwd(), RESEARCH_PATH, entry.id);
+const [contentHtml, paperCss] = await Promise.all([
+  readFile(path.join(paperDir, "content.html"), "utf-8"),
+  readFile(path.join(paperDir, "styles.css"), "utf-8"),
+]);
+---
+
+<PaperLayout {entry} {contentHtml} {paperCss} />

@@ -1,0 +1,44 @@
+---
+import type { UnifiedEntry } from "@/utils/getAllEntries";
+import { toTransitionName } from "@/utils/toTransitionName";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import Datetime from "./Datetime.astro";
+
+type Props = {
+  variant?: "h2" | "h3";
+  entry: UnifiedEntry;
+};
+
+const { variant: Heading = "h2", entry } = Astro.props;
+const { title, description, href, type, pubDatetime, modDatetime, timezone } =
+  entry;
+
+const t = useTranslations(Astro.currentLocale ?? config.site.lang);
+---
+
+<li class="my-6">
+  <a
+    href={href}
+    class:list={[
+      "text-accent inline-block text-lg font-medium",
+      "decoration-dashed underline-offset-4 hover:underline",
+      "focus-visible:no-underline focus-visible:underline-offset-0",
+    ]}
+  >
+    <Heading transition:name={toTransitionName(title)}>
+      {title}
+    </Heading>
+  </a>
+  <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <Datetime {pubDatetime} {modDatetime} {timezone} />
+    {
+      type === "research" && (
+        <span class="border-accent/40 text-accent rounded-full border px-2 py-0.5 text-xs font-medium">
+          {t.research.badge}
+        </span>
+      )
+    }
+  </div>
+  <p>{description}</p>
+</li>

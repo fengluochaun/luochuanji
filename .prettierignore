@@ -15,3 +15,7 @@
 
 # Ignore MDX files
 *.mdx
+
+# Generated research pages (imported verbatim by scripts/research;
+# reformatting could alter rendered whitespace / KaTeX delimiters)
+/src/data/research/
