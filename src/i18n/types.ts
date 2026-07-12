@@ -2,6 +2,9 @@ export interface UIStrings {
   nav: {
     home: string;
     posts: string;
+    essays: string;
+    notes: string;
+    research: string;
     tags: string;
     about: string;
     archives: string;
@@ -19,6 +22,7 @@ export interface UIStrings {
     editPage: string;
     previousPost: string;
     nextPost: string;
+    toc: string;
   };
   pagination: {
     prev: string;
@@ -52,6 +56,15 @@ export interface UIStrings {
 
     postsTitle: string;
     postsDesc: string;
+
+    essaysTitle: string;
+    essaysDesc: string;
+
+    notesTitle: string;
+    notesDesc: string;
+
+    researchTitle: string;
+    researchDesc: string;
 
     archivesTitle: string;
     archivesDesc: string;

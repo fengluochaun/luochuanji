@@ -35,6 +35,11 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+  // Posts moved into category subdirs (essays/notes) on 2026-07-12; keep old
+  // URLs alive for anything published before that.
+  redirects: {
+    "/posts/hello-luochuanji": "/posts/essays/hello-luochuanji",
+  },
   markdown: {
     processor: unified({
       remarkPlugins: [

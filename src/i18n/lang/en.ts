@@ -4,6 +4,9 @@ export default {
   nav: {
     home: "Home",
     posts: "Posts",
+    essays: "Essays",
+    notes: "Notes",
+    research: "Research",
     tags: "Tags",
     about: "About",
     archives: "Archives",
@@ -21,6 +24,7 @@ export default {
     editPage: "Edit page",
     previousPost: "Previous Post",
     nextPost: "Next Post",
+    toc: "Contents",
   },
   pagination: {
     prev: "Prev",
@@ -54,6 +58,15 @@ export default {
 
     postsTitle: "Posts",
     postsDesc: "All the articles I've posted.",
+
+    essaysTitle: "Essays",
+    essaysDesc: "Casual essays and musings.",
+
+    notesTitle: "Notes",
+    notesDesc: "Reading and engineering notes.",
+
+    researchTitle: "Research",
+    researchDesc: "Paper deep-readings.",
 
     archivesTitle: "Archives",
     archivesDesc: "All the articles I've archived.",

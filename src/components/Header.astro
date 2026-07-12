@@ -30,7 +30,11 @@ const currentPath = stripLocale(pathWithoutTrailingSlash, locale);
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
   const pathArray = path.split("/").filter(p => p.trim());
-  return currentPath === path || currentPathArray[0] === pathArray[0];
+  return (
+    currentPath === path ||
+    (pathArray.length > 0 &&
+      pathArray.every((segment, index) => currentPathArray[index] === segment))
+  );
 };
 ---
 
@@ -76,10 +80,26 @@ const isActive = (path: string) => {
       >
         <li class="col-span-2">
           <a
-            href={getRelativeLocaleUrl(locale, "posts")}
-            class:list={{ "active-nav": isActive("/posts") }}
+            href={getRelativeLocaleUrl(locale, "essays")}
+            class:list={{ "active-nav": isActive("/essays") }}
           >
-            {t.nav.posts}
+            {t.nav.essays}
+          </a>
+        </li>
+        <li class="col-span-2">
+          <a
+            href={getRelativeLocaleUrl(locale, "notes")}
+            class:list={{ "active-nav": isActive("/notes") }}
+          >
+            {t.nav.notes}
+          </a>
+        </li>
+        <li class="col-span-2">
+          <a
+            href={getRelativeLocaleUrl(locale, "research")}
+            class:list={{ "active-nav": isActive("/research") }}
+          >
+            {t.nav.research}
           </a>
         </li>
         <li class="col-span-2">

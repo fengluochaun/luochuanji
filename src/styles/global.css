@@ -21,8 +21,16 @@
   }
 }
 
+/*
+ * 全站统一版心:文章(原 768px)与论文页(原 960px)收敛到 832px。
+ * TocRail 侧目录的定位公式依赖这个值(见 TocRail.astro),改宽度两处同步。
+ */
+:root {
+  --app-width: 52rem;
+}
+
 @utility max-w-app {
-  @apply max-w-3xl;
+  max-width: var(--app-width);
 }
 
 @utility app-layout {

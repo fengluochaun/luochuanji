@@ -4,8 +4,11 @@ export default {
   nav: {
     home: "首页",
     posts: "文章",
-    tags: "标签",
-    about: "关于",
+    essays: "清谈",
+    notes: "札记",
+    research: "格物",
+    tags: "类目",
+    about: "自序",
     archives: "归档",
     search: "搜索",
   },
@@ -21,6 +24,7 @@ export default {
     editPage: "编辑此页",
     previousPost: "上一篇",
     nextPost: "下一篇",
+    toc: "目录",
   },
   pagination: {
     prev: "上一页",
@@ -49,11 +53,20 @@ export default {
     tagTitle: "标签",
     tagDesc: "所有带该标签的文章",
 
-    tagsTitle: "标签",
-    tagsDesc: "文章使用的全部标签。",
+    tagsTitle: "类目",
+    tagsDesc: "文章与论文的全部类目。",
 
     postsTitle: "文章",
     postsDesc: "我发布的全部文章。",
+
+    essaysTitle: "清谈",
+    essaysDesc: "杂谈漫笔，不拘一格。",
+
+    notesTitle: "札记",
+    notesDesc: "读书与技术的札记。",
+
+    researchTitle: "格物",
+    researchDesc: "论文精读，格物致知。",
 
     archivesTitle: "归档",
     archivesDesc: "按时间归档的全部文章。",

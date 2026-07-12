@@ -7,6 +7,7 @@ import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
 import Comments from "@/components/Comments.astro";
+import TocRail from "@/components/TocRail.astro";
 import { slugifyStr } from "@/utils/slugify";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -86,7 +87,7 @@ const siteHarmonizationCss = `
 .paper-root .metric .num { font-size: 26px; }
 .paper-root .metric { border-radius: 14px; }
 .paper-root section.card { border-radius: 16px; }
-.paper-root .hero, .paper-root .container { max-width: 960px; }
+.paper-root .hero, .paper-root .container { max-width: var(--app-width); }
 .paper-root section[id] { scroll-margin-top: 90px; }
 `;
 
@@ -241,20 +242,7 @@ const tocItems = (() => {
       </ul>
     </div>
 
-    {
-      tocItems.length > 1 && (
-        <nav id="paper-toc" class="paper-toc" aria-label={t.research.toc}>
-          <span class="paper-toc__title">{t.research.toc}</span>
-          <ul>
-            {tocItems.map(item => (
-              <li>
-                <a href={`#${item.id}`}>{item.title}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )
-    }
+    {tocItems.length > 1 && <TocRail items={tocItems} label={t.research.toc} />}
 
     <div class="paper-root" set:html={contentHtml} />
   </main>
@@ -266,105 +254,4 @@ const tocItems = (() => {
 
 <script>
   import "@/scripts/render-paper-math";
-</script>
-
-<style>
-  /*
-   * 左侧目录:paper 容器缩到 960px 后,≥1440px 视口两侧各有
-   * ≥240px 留白,放得下 200px 的目录;更窄视口直接隐藏。
-   */
-  .paper-toc {
-    display: none;
-  }
-
-  @media (min-width: 1440px) {
-    .paper-toc {
-      display: block;
-      position: fixed;
-      top: 132px;
-      left: calc(50vw - 480px - 216px);
-      z-index: 5;
-      inline-size: 200px;
-      max-block-size: calc(100vh - 200px);
-      overflow-y: auto;
-      font-size: 0.8125rem;
-    }
-  }
-
-  .paper-toc__title {
-    display: block;
-    margin-block-end: 0.5rem;
-    font-family: var(--font-serif);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--muted-foreground);
-  }
-
-  .paper-toc ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-inline-start: 1px solid var(--border);
-  }
-
-  .paper-toc a {
-    display: block;
-    margin-inline-start: -1px;
-    padding: 0.3rem 0.75rem;
-    border-inline-start: 2px solid transparent;
-    color: var(--muted-foreground);
-    line-height: 1.5;
-    text-decoration: none;
-  }
-
-  .paper-toc a:hover {
-    color: var(--accent);
-  }
-
-  .paper-toc a.active {
-    border-inline-start-color: var(--accent);
-    color: var(--accent);
-  }
-</style>
-
-<script>
-  // 目录滚动高亮:观察各 section,文档序第一个可见者为当前节。
-  function initPaperToc() {
-    const toc = document.getElementById("paper-toc");
-    if (!toc) return;
-
-    const links = Array.from(
-      toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')
-    );
-    const idOf = (a: HTMLAnchorElement) => decodeURIComponent(a.hash.slice(1));
-    const sections = links
-      .map(a => document.getElementById(idOf(a)))
-      .filter((el): el is HTMLElement => el !== null);
-    if (sections.length === 0) return;
-
-    const linkById = new Map(links.map(a => [idOf(a), a]));
-    const visible = new Set<string>();
-
-    const setActive = () => {
-      const current = sections.find(s => visible.has(s.id));
-      for (const [id, link] of linkById) {
-        link.classList.toggle("active", id === current?.id);
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      entries => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) visible.add(entry.target.id);
-          else visible.delete(entry.target.id);
-        }
-        setActive();
-      },
-      { rootMargin: "-90px 0px -55% 0px" }
-    );
-    sections.forEach(section => observer.observe(section));
-  }
-
-  initPaperToc();
-  document.addEventListener("astro:after-swap", initPaperToc);
 </script>
