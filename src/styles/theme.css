@@ -7,28 +7,36 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --font-app: var(--font-google-sans-code);
+
+  /* Type roles: 宋体标题 / 黑体正文 / 等宽代码 */
+  --font-serif: var(--font-noto-serif-sc), "Songti SC", "SimSun", serif;
+  --font-sans:
+    var(--font-noto-sans-sc), "PingFang SC", "Microsoft YaHei", system-ui,
+    sans-serif;
+  --font-mono: var(--font-google-sans-code), ui-monospace, monospace;
+  /* Body default → 黑体正文 */
+  --font-app: var(--font-sans);
 }
 
-/* Light theme values */
+/* Light theme — 宣纸 (paper) */
 :root,
 [data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #282728;
-  --accent: #006cac;
+  --background: #f6f1e3; /* 宣纸底 */
+  --foreground: #262019; /* 松烟墨 */
+  --accent: #a8352b; /* 朱砂 */
   --accent-foreground: #ffffff;
-  --muted: #e6e6e6;
-  --muted-foreground: #6b7280;
-  --border: #ece9e9;
+  --muted: #e6decb; /* 卡片 / 代码浅底 */
+  --muted-foreground: #6b5d4c; /* 淡墨 */
+  --border: #ded4be; /* 纸纹分隔线 */
 }
 
-/* Dark theme values */
+/* Dark theme — 灯下墨底 (ink under lamplight) */
 [data-theme="dark"] {
-  --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --accent-foreground: #ffffff;
-  --muted: #343f60;
-  --muted-foreground: #afb9ca;
-  --border: #ab4b08;
+  --background: #1c1915; /* 松烟暖黑 */
+  --foreground: #e9e0d1; /* 米白 */
+  --accent: #e0714d; /* 枫叶橙 */
+  --accent-foreground: #1c1915;
+  --muted: #2a2520; /* 卡片 / 代码浅底 */
+  --muted-foreground: #a99a85; /* 暖灰 */
+  --border: #3a332b; /* 暗纹分隔线 */
 }

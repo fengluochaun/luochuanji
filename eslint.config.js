@@ -23,5 +23,13 @@ export default [
     files: ["scripts/**/*.mjs"],
     rules: { "no-console": "off" },
   },
-  { ignores: ["dist/**", ".astro/**", "public/pagefind/**", "smartsearch/**"] },
+  {
+    ignores: [
+      "dist/**",
+      ".astro/**",
+      "public/pagefind/**",
+      "smartsearch/**",
+      ".trellis/**",
+    ],
+  },
 ];

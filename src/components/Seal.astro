@@ -1,0 +1,52 @@
+---
+// 朱印 — 洛川集的钤印签名元素。
+// 朱砂方印,内嵌单字(默认「集」)。纯 CSS/SVG,装饰性,aria-hidden。
+// prefers-reduced-motion 下静止(本组件本就无动画,入场动效在使用处控制)。
+type Props = {
+  char?: string;
+  class?: string;
+  size?: number;
+};
+
+const { char = "集", class: className, size = 48 } = Astro.props;
+---
+
+<span
+  class:list={["seal", className]}
+  style={`--seal-size:${size}px`}
+  aria-hidden="true"
+>
+  <span class="seal__char">{char}</span>
+</span>
+
+<style>
+  .seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--seal-size);
+    block-size: var(--seal-size);
+    border: 2px solid var(--accent);
+    border-radius: calc(var(--seal-size) * 0.14);
+    color: var(--accent);
+    background: radial-gradient(
+      circle at 30% 25%,
+      transparent 0 62%,
+      color-mix(in srgb, var(--accent) 7%, transparent) 100%
+    );
+    /* 轻微做旧:内侧一圈朱砂晕，不用滤镜堆砌 */
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--accent) 40%, transparent);
+    user-select: none;
+  }
+
+  .seal__char {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: calc(var(--seal-size) * 0.56);
+    line-height: 1;
+    letter-spacing: 0;
+    /* 印文笔画略粗，模拟钤印力度 */
+    -webkit-text-stroke: 0.4px currentColor;
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+// 川流分隔线 — 替代直线 border / dashed hr 的招牌分隔。
+// 一条振幅极小的正弦水纹,细看才显出「川流」意象;静态,不动。
+type Props = {
+  class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["wave-rule", className]} role="separator" aria-hidden="true">
+  <svg
+    viewBox="0 0 720 8"
+    preserveAspectRatio="none"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M0 4 C 30 1, 60 1, 90 4 S 150 7, 180 4 S 240 1, 270 4 S 330 7, 360 4 S 420 1, 450 4 S 510 7, 540 4 S 600 1, 630 4 S 690 7, 720 4"
+      stroke="currentColor"
+      stroke-width="1"
+      vector-effect="non-scaling-stroke"></path>
+  </svg>
+</div>
+
+<style>
+  .wave-rule {
+    color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    block-size: 8px;
+    inline-size: 100%;
+  }
+
+  .wave-rule svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+</style>

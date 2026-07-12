@@ -30,7 +30,7 @@
 }
 
 @utility active-nav {
-  @apply underline decoration-wavy decoration-2 underline-offset-8;
+  @apply decoration-accent underline decoration-2 underline-offset-8;
 }
 
 :target {

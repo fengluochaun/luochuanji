@@ -68,6 +68,26 @@ export default defineConfig({
       styles: ["normal", "italic"],
       formats: ["woff", "ttf"],
     },
+    {
+      // 正文黑体 — 思源黑体
+      name: "Noto Sans SC",
+      cssVariable: "--font-noto-sans-sc",
+      provider: fontProviders.google(),
+      fallbacks: ["PingFang SC", "Microsoft YaHei", "sans-serif"],
+      weights: [400, 500, 700],
+      styles: ["normal"],
+      display: "swap",
+    },
+    {
+      // 标题 / 题记宋体 — 思源宋体
+      name: "Noto Serif SC",
+      cssVariable: "--font-noto-serif-sc",
+      provider: fontProviders.google(),
+      fallbacks: ["Songti SC", "SimSun", "serif"],
+      weights: [600, 700],
+      styles: ["normal"],
+      display: "swap",
+    },
   ],
   env: {
     schema: {

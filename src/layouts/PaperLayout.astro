@@ -49,10 +49,24 @@ const paperResetCss = `
  * - The standalone page reserves top padding for its own fixed navbar, which
  *   the importer strips — the site header sits above the paper in normal
  *   flow instead, so the reserved space is reduced.
+ * - Light-mode palette bridge: imported pages ship a cool-grey/apple-blue
+ *   palette (--bg #f5f5f7, --blue #0066cc) that reads as a foreign panel on
+ *   the warm 宣纸 site theme. Re-pointing --bg/--blue at the site tokens (and
+ *   re-tinting the hardcoded blue badge chips) keeps every imported page in
+ *   the site's 朱砂 family without touching generated styles.css. The dark
+ *   layer below is appended later, so dark mode still wins.
  */
 const siteHarmonizationCss = `
 /* site-shell harmonization (see PaperLayout.astro) */
 .paper-root .hero { padding-top: 48px; }
+.paper-root {
+  --bg: var(--background);
+  --blue: var(--accent);
+}
+.paper-root .badge {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
 `;
 
 /**
@@ -73,9 +87,10 @@ const siteHarmonizationCss = `
  *    contract), so targeting them here covers every template-based page.
  *
  * Palette is tuned to the AstroPaper dark theme in `src/styles/theme.css`
- * (--background #212737, --foreground #eaedf3, --muted #343f60,
- * --muted-foreground #afb9ca): a blue-slate family, never pure black, so the
- * paper reads as part of the site rather than a foreign light panel.
+ * (--background #1c1915, --foreground #e9e0d1, --muted #2a2520,
+ * --muted-foreground #a99a85, --accent #e0714d): a warm松烟墨 family, never
+ * pure black, so the paper reads as part of the site rather than a foreign
+ * light panel.
  *
  * No-flash: the layer is plain CSS keyed on `html[data-theme]`, which the
  * inline FOUC script in Layout.astro sets before first paint — dark renders
@@ -85,21 +100,21 @@ const siteHarmonizationCss = `
  */
 const paperDarkCss = `
 html[data-theme="dark"] .paper-root {
-  --bg: #212737;
-  --paper: #2b3347;
-  --ink: #eaedf3;
-  --muted: #a6b0c3;
-  --line: #394155;
-  --blue: #6ea8e6;
-  --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  --bg: #1c1915;
+  --paper: #262019;
+  --ink: #e9e0d1;
+  --muted: #a99a85;
+  --line: #3a332b;
+  --blue: #e0714d;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 html[data-theme="dark"] .paper-root .badge {
-  background: rgba(110, 168, 230, 0.16);
-  color: #9ec5f0;
+  background: rgba(224, 113, 77, 0.16);
+  color: #e8a07f;
 }
 html[data-theme="dark"] .paper-root .badge.gray {
-  background: rgba(255, 255, 255, 0.08);
-  color: #c3ccdb;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c8bda9;
 }
 html[data-theme="dark"] .paper-root .metric,
 html[data-theme="dark"] .paper-root section.card {
@@ -110,16 +125,16 @@ html[data-theme="dark"] .paper-root .mini-card,
 html[data-theme="dark"] .paper-root .ref,
 html[data-theme="dark"] .paper-root .formula,
 html[data-theme="dark"] .paper-root figcaption {
-  background: #262e40;
+  background: #221d16;
 }
 html[data-theme="dark"] .paper-root figure {
   background: var(--paper);
 }
 html[data-theme="dark"] .paper-root th {
-  background: #2f3850;
+  background: #2d2620;
 }
 html[data-theme="dark"] .paper-root .lead {
-  color: #d4d9e3;
+  color: #d8cdb9;
 }
 `;
 
@@ -176,7 +191,7 @@ const contextLine = [topicTitle, seriesTitle].filter(Boolean).join(" · ");
               href={source}
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-accent underline decoration-dashed underline-offset-4"
+              class="hover:text-accent underline underline-offset-4"
             >
               {t.research.sourceLabel}
             </a>

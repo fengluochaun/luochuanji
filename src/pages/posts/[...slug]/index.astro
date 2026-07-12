@@ -15,6 +15,7 @@ import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import WaveRule from "@/components/WaveRule.astro";
 import config from "@/config";
 
 export async function getStaticPaths() {
@@ -114,7 +115,7 @@ const ogImage = ogImageUrl
   >
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
-      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+      class="text-accent inline-block font-serif text-2xl font-bold sm:text-3xl"
     >
       {title}
     </h1>
@@ -144,7 +145,7 @@ const ogImage = ogImageUrl
       <Content />
     </article>
 
-    <hr class="my-8 border-dashed" />
+    <WaveRule class="my-8" />
 
     <EditPost class="sm:hidden" {hideEditPost} {post} />
 
@@ -156,7 +157,7 @@ const ogImage = ogImageUrl
 
     <ShareLinks />
 
-    <hr class="my-8 border-dashed" />
+    <WaveRule class="my-8" />
 
     <AdjacentPostNav {prevPost} {nextPost} />
   </main>
