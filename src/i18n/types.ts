@@ -38,6 +38,7 @@ export interface UIStrings {
   research: {
     badge: string;
     sourceLabel: string;
+    toc: string;
   };
   comments: {
     title: string;

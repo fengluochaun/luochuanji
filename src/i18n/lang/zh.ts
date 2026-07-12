@@ -40,6 +40,7 @@ export default {
   research: {
     badge: "论文精读",
     sourceLabel: "原文链接",
+    toc: "目录",
   },
   comments: {
     title: "评论",

@@ -40,6 +40,7 @@ export default {
   research: {
     badge: "Paper Notes",
     sourceLabel: "Source",
+    toc: "Contents",
   },
   comments: {
     title: "Comments",
