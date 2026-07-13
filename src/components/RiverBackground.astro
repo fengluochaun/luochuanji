@@ -1,0 +1,164 @@
+---
+// 川上 —— 全站动态背景。
+// 承「枫落于川，川流成集」之意:数条极淡的水纹在版面底部缓缓横移,
+// 交错的漂移速度让线条读作「流水」而非「格线」;其中一线朱砂,是为活眼。
+// 纯 CSS 漂移,固定于视口底部,fixed + pointer-events:none + aria-hidden;
+// prefers-reduced-motion 下静止,静态水纹本身亦成画。
+//
+// 无缝循环约束:每层 SVG 铺 2880 单位(= 2×1440 视口瓦片),元素宽 200%,
+// 横移半程(1440)即完整错位。故周期须整除 1440 且半瓦片含偶数段,
+// 相位方能在接缝处吻合。下方周期 360/288/480/240 均满足。
+const TILE = 2880;
+
+/** 生成横贯 TILE 的连续波形:每半周期一个平滑起伏,基线居中于 viewBox 高 120。 */
+function wave(period: number, amp: number): string {
+  const half = period / 2;
+  let d = "M0 60";
+  let x = 0;
+  let up = true;
+  while (x < TILE) {
+    d += ` q ${half / 2} ${up ? -amp : amp} ${half} 0`;
+    x += half;
+    up = !up;
+  }
+  return d;
+}
+
+// 由近及远:振幅渐小、越淡、越慢;方向交替以生「视差」。朱砂线穿行其间。
+const layers = [
+  {
+    path: wave(360, 30),
+    b: -8,
+    h: 150,
+    tint: "ink",
+    ink: 14,
+    dur: 46,
+    dir: "l",
+  },
+  {
+    path: wave(240, 18),
+    b: 52,
+    h: 120,
+    tint: "red",
+    ink: 22,
+    dur: 57,
+    dir: "r",
+  },
+  {
+    path: wave(288, 22),
+    b: 34,
+    h: 130,
+    tint: "ink",
+    ink: 10,
+    dur: 63,
+    dir: "r",
+  },
+  {
+    path: wave(480, 15),
+    b: 78,
+    h: 110,
+    tint: "ink",
+    ink: 7,
+    dur: 81,
+    dir: "l",
+  },
+];
+---
+
+<div class="river" aria-hidden="true" role="presentation">
+  {
+    layers.map(l => (
+      <div
+        class="river__layer"
+        data-tint={l.tint}
+        data-dir={l.dir}
+        style={`--b:${l.b}px;--h:${l.h}px;--o:${l.ink}%;--dur:${l.dur}s`}
+      >
+        <svg viewBox="0 0 2880 120" preserveAspectRatio="none" fill="none">
+          <path
+            d={l.path}
+            stroke="currentColor"
+            stroke-width={l.tint === "red" ? 1.2 : 1.4}
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .river {
+    position: fixed;
+    inset: 0;
+    z-index: -1; /* 绘于 body 底色之上、正文之下(负 z 后代仍压过父背景) */
+    overflow: hidden; /* 裁掉 200% 宽的溢出,不产生横向滚动 */
+    pointer-events: none;
+    /* 水纹只在底部,向上溶入宣纸,守住阅读区留白 */
+    -webkit-mask-image: linear-gradient(
+      to top,
+      #000 0,
+      #000 20%,
+      transparent 44%
+    );
+    mask-image: linear-gradient(to top, #000 0, #000 20%, transparent 44%);
+  }
+
+  .river__layer {
+    position: absolute;
+    left: 0;
+    bottom: var(--b);
+    inline-size: 200%;
+    block-size: var(--h);
+    color: color-mix(in srgb, var(--foreground) var(--o), transparent);
+    will-change: transform;
+    animation: river-drift-l var(--dur) linear infinite;
+  }
+
+  .river__layer[data-tint="red"] {
+    color: color-mix(in srgb, var(--accent) var(--o), transparent);
+  }
+
+  .river__layer[data-dir="r"] {
+    animation-name: river-drift-r;
+  }
+
+  .river__layer svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  @keyframes river-drift-l {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes river-drift-r {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* 静水流深:关掉漂移,留住一帧水纹 */
+  @media (prefers-reduced-motion: reduce) {
+    .river__layer {
+      animation: none;
+      transform: translateX(-25%);
+    }
+  }
+
+  @media print {
+    .river {
+      display: none;
+    }
+  }
+</style>

@@ -4,6 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
+import RiverBackground from "@/components/RiverBackground.astro";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -121,6 +122,8 @@ const rssHref = getRelativeLocaleUrl(
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
+    <!-- 川上:动态水纹背景,persist 使漂移相位跨页面导航连续 -->
+    <RiverBackground transition:persist="river-bg" />
     <slot />
     <script>
       import "@/scripts/theme";

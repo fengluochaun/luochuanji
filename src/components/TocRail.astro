@@ -2,6 +2,10 @@
 // 共享侧边目录 —— 文章页与论文页复用。
 // 服务端传入 { id, title } 列表;≥1440px 固定在版心左侧留白区,
 // 更窄视口隐藏。滚动高亮走 IntersectionObserver。
+//
+// 目录即川:左脊线是一道竖排水纹(呼应 WaveRule),朱砂墨色自上而下
+// 涨到当前小节 —— 读到哪里,川就流到哪里;墨点(菱形)泊在水位线上。
+// 条目冠以汉字卷次(一、二、三……),编码真实的章节次序。
 type TocItem = { id: string; title: string };
 
 type Props = {
@@ -12,19 +16,67 @@ type Props = {
 };
 
 const { items, label } = Astro.props;
+
+/** 1-99 → 汉字数字,充当卷次标记 */
+function toHan(n: number): string {
+  const d = "一二三四五六七八九";
+  if (n <= 9) return d[n - 1];
+  const tens = Math.floor(n / 10);
+  const ones = n % 10;
+  return (tens > 1 ? d[tens - 1] : "") + "十" + (ones ? d[ones - 1] : "");
+}
+
+// 竖排水纹:viewBox 8×240,四个半波,preserveAspectRatio=none 随目录高度拉伸。
+const streamPath = "M4 0 q 3 30 0 60 q -3 30 0 60 q 3 30 0 60 q -3 30 0 60";
 ---
 
 {
   items.length > 1 && (
     <nav class="toc-rail" aria-label={label} data-toc-rail>
       <span class="toc-rail__title">{label}</span>
-      <ul>
-        {items.map(item => (
-          <li>
-            <a href={`#${item.id}`}>{item.title}</a>
-          </li>
-        ))}
-      </ul>
+      <div class="toc-rail__body">
+        <svg
+          class="toc-rail__stream"
+          viewBox="0 0 8 240"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d={streamPath}
+            stroke="currentColor"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+        <svg
+          class="toc-rail__stream toc-rail__stream--ink"
+          viewBox="0 0 8 240"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d={streamPath}
+            stroke="currentColor"
+            stroke-width="1.5"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+        <span class="toc-rail__node" aria-hidden="true" />
+        <ul>
+          {items.map((item, i) => (
+            <li>
+              <a href={`#${item.id}`}>
+                <span class="toc-rail__ordinal" aria-hidden="true">
+                  {toHan(i + 1)}
+                </span>
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }
@@ -56,51 +108,124 @@ const { items, label } = Astro.props;
 
   .toc-rail__title {
     display: block;
-    margin-block-end: 0.5rem;
+    margin-block-end: 0.75rem;
     font-family: var(--font-serif);
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
     color: var(--muted-foreground);
+  }
+
+  .toc-rail__body {
+    position: relative;
+    /* --toc-ink:墨色水位,自当前小节中心起算;由脚本随阅读推进 */
+    --toc-ink: 0px;
+  }
+
+  .toc-rail__stream {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: 8px;
+    block-size: 100%;
+    color: var(--border);
+    pointer-events: none;
+  }
+
+  .toc-rail__stream--ink {
+    color: var(--accent);
+    clip-path: inset(0 0 calc(100% - var(--toc-ink)) 0);
+    transition: clip-path 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* 墨点:泊在水位线上的菱形,呼应朱印的方折 */
+  .toc-rail__node {
+    position: absolute;
+    inset-block-start: -2.5px;
+    inset-inline-start: 4px;
+    inline-size: 5px;
+    block-size: 5px;
+    margin-inline-start: -2.5px;
+    border-radius: 1px;
+    background: var(--accent);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 45%, transparent);
+    transform: translateY(var(--toc-ink)) rotate(45deg);
+    transition:
+      transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 300ms ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .toc-rail__body.is-flowing .toc-rail__node {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-rail__stream--ink,
+    .toc-rail__node {
+      transition: none;
+    }
   }
 
   .toc-rail ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    border-inline-start: 1px solid var(--border);
   }
 
   .toc-rail a {
+    position: relative;
     display: block;
-    margin-inline-start: -1px;
-    padding: 0.3rem 0.75rem;
-    border-inline-start: 2px solid transparent;
+    padding: 0.3rem 0.25rem 0.3rem 2.6rem;
+    font-family: var(--font-serif);
     color: var(--muted-foreground);
-    line-height: 1.5;
+    line-height: 1.55;
     text-decoration: none;
+    transition: color 200ms ease;
     /* 长标题截断,避免撑破窄轨 */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  .toc-rail__ordinal {
+    position: absolute;
+    inset-inline-start: 1.1rem;
+    inline-size: 1.3rem;
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--muted-foreground) 62%, transparent);
+    transition: color 200ms ease;
+    user-select: none;
+  }
+
   .toc-rail a:hover {
-    color: var(--accent);
+    color: var(--foreground);
+  }
+
+  .toc-rail a:hover .toc-rail__ordinal {
+    color: var(--foreground);
   }
 
   .toc-rail a.active {
-    border-inline-start-color: var(--accent);
     color: var(--accent);
+    font-weight: 600;
     white-space: normal;
+  }
+
+  .toc-rail a.active .toc-rail__ordinal {
+    color: var(--accent);
+    font-weight: 400;
   }
 </style>
 
 <script>
   // 目录滚动高亮:观察各锚点目标,文档序第一个可见者为当前节。
+  // 同时把 --toc-ink 推到当前条目中心,驱动水纹涨墨与墨点移泊。
   function initTocRail() {
     const rail = document.querySelector<HTMLElement>("[data-toc-rail]");
     if (!rail) return;
 
+    const body = rail.querySelector<HTMLElement>(".toc-rail__body");
     const links = Array.from(
       rail.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')
     );
@@ -115,8 +240,20 @@ const { items, label } = Astro.props;
 
     const setActive = () => {
       const current = targets.find(s => visible.has(s.id));
+      let activeLink: HTMLAnchorElement | undefined;
       for (const [id, link] of linkById) {
-        link.classList.toggle("active", id === current?.id);
+        const isActive = id === current?.id;
+        link.classList.toggle("active", isActive);
+        if (isActive) activeLink = link;
+      }
+      if (!body) return;
+      body.classList.toggle("is-flowing", Boolean(activeLink));
+      if (activeLink) {
+        // active 切换可能引起换行重排,读取放在类名更新之后
+        const ink = activeLink.offsetTop + activeLink.offsetHeight / 2;
+        body.style.setProperty("--toc-ink", `${ink}px`);
+      } else {
+        body.style.setProperty("--toc-ink", "0px");
       }
     };
 
