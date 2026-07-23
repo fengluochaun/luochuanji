@@ -1,0 +1,16 @@
+{
+  "title": "SANSA：释放 SAM2 隐藏语义做 Few-Shot 分割",
+  "description": "NeurIPS 2025 论文 SANSA 精读：把 SAM2 的实例追踪重铸为跨图语义追踪，轻量 AdaptFormer 解耦 tracking 特征中的语义结构，在 strict FSS 与 generalist 设置上达到 SOTA，并支持点/框/涂鸦弱标注。",
+  "date": "2026-07-23",
+  "tags": [
+    "论文精读",
+    "few-shot-segmentation",
+    "SAM2",
+    "semantic-segmentation",
+    "computer-vision"
+  ],
+  "source": "https://arxiv.org/abs/2505.21795",
+  "topicTitle": "计算机视觉",
+  "seriesTitle": "小样本分割",
+  "importedAt": "2026-07-23T14:58:42.585Z"
+}
