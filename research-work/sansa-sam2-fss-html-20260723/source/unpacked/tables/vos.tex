@@ -1,0 +1,25 @@
+\definecolor{verylightgray}{rgb}{0.95, 0.95, 0.95}
+
+\begin{table}[h]
+\begin{center}
+\caption{\textbf{Evaluation of traditional Video Object Segmentation methods and \sam{} with and without SANSA adaptation.} We report mIoU (\%) on COCO-20$^i$ 1-shot segmentation.}
+\vspace{3pt}
+\resizebox{0.65\linewidth}{!}{%
+\begin{tabular}{lcc|cc}
+\toprule
+\textbf{Method} & \textbf{Backbone} & \textbf{\#Params} & \textbf{Frozen} & \textbf{+SANSA} \\
+\midrule
+ {AOT} \cite{yang2021associating}& Swin-B & 70 M & 25.0 & 48.5 \\
+ {DeAOT} \cite{yang2022decoupling} & Swin-B & 75 M & 26.9 & 51.0 \\
+ {MAVOS} \cite{shaker2024efficient} & Swin-B & 96 M & 27.1 & {52.3} \\
+\midrule
+ {SAM2} \cite{ravi2024sam} & Hiera-B & 86 M & 28.0 & 55.4 \\
+ {SAM2} \cite{ravi2024sam} & Hiera-L & 234 M & 32.2 &
+ {60.2} \\
+\bottomrule
+\end{tabular}%
+}
+\label{tab:vos_tracker}
+\end{center}
+\vspace{-0.1cm}
+\end{table}

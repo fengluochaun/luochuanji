@@ -1,0 +1,147 @@
+\documentclass{article}
+
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2025
+
+
+% ready for submission
+%\usepackage{neurips_2025}
+
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2025}
+
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+\usepackage[final, nonatbib]{neurips_2025}
+
+
+% to avoid loading the natbib package, add option nonatbib:
+%\usepackage[nonatbib]{neurips_2025}
+\usepackage{makecell}
+
+\usepackage{pifont} % for ding symbols
+\newcommand{\xmark}{\ding{55}} % define xmark as a cross
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+%\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+%\usepackage{xcolor}         % colors
+\usepackage{xcolor} % Make sure this is in your preamble
+
+
+%%%%%%%%%%%%%%% added by me
+
+\usepackage{xspace}
+\usepackage{soul}  
+\newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\mycode}[1]{{\color{orange}#1}}
+\newcommand{\todo}[1]{{\color{red}#1}}
+\newcommand{\TODO}[1]{\textbf{\color{red}[TODO: #1]}}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{adjustbox}
+\def\onedot{.\xspace}
+\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{color, colortbl}
+\usepackage{makecell}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tabulary}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+\definecolor{citecolor}{RGB}{0, 113, 188}
+\usepackage[pagebackref,breaklinks,colorlinks,citecolor=citecolor,linkcolor=red]{hyperref}
+\usepackage[capitalize]{cleveref}
+\crefname{section}{Sec.}{Secs.}
+\Crefname{section}{Section}{Sections}
+\Crefname{table}{Table}{Tables}
+\crefname{table}{Tab.}{Tabs.}
+\newcommand{\pub}[1]{\color{gray}{\scriptsize{[{#1}]}}}
+\newcommand{\puB}[1]{\color{gray}{\small{{#1}}}}
+\newcommand{\myparagraph}[1]{\vspace{4pt}\noindent\textbf{#1.}}
+\newcommand{\myparagraphnodot}[1]{\vspace{4pt}\noindent\textbf{#1}}
+\definecolor{mylightgray}{gray}{0.4}
+\definecolor{mylightgrayours}{gray}{0.2}
+\definecolor{lightblue}{rgb}{0.8, 0.8, 1.0}
+
+
+\newcommand\ours{SANSA}
+\newcommand\sam{\textsc{SAM2}}
+
+%%%%%%%%%%%%%%%
+
+\title{SANSA: Unleashing the Hidden Semantics in \\ SAM2 for Few-Shot Segmentation}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+\author{Claudia Cuttano${^{*} }$ \quad Gabriele Trivigno\thanks{Equal contribution.}
+\quad
+Giuseppe Averta
+\quad
+Carlo Masone  \\[0.2cm]
+Politecnico di Torino \\
+{\tt\small \{name.surname\}@polito.it \
+}
+}
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+Few-shot segmentation aims to segment unseen categories from just a handful of annotated examples. This requires mechanisms to identify semantically related objects across images and accurately produce masks. We note that Segment Anything 2 (SAM2), with its \textit{prompt-and-propagate} mechanism, provides strong segmentation capabilities and a built-in feature matching process. However, we show that its representations are entangled with task-specific cues optimized for object tracking, which impairs its use for tasks requiring higher level semantic understanding. Our key insight is that, despite its class-agnostic pretraining, SAM2 already encodes rich semantic structure in its features. We propose \textbf{\ours{}} (\textbf{S}emantically \textbf{A}lig\textbf{N}ed \textbf{S}egment\textbf{A}nything 2), a framework that makes this latent structure explicit, and repurposes SAM2 for few-shot segmentation through minimal task-specific modifications. SANSA achieves state-of-the-art on few-shot segmentation benchmarks designed to assess generalization and outperforms generalist methods in the popular in-context setting. Additionally, it supports  flexible promptable interaction via points, boxes, or scribbles, and remains significantly faster and more compact than prior approaches.  Code at: \url{https://github.com/ClaudiaCuttano/SANSA}.
+\end{abstract}
+
+
+\input{sec/1_intro}
+\input{sec/2_related}
+\input{sec/3_method}
+\input{sec/4_esperiments}
+\input{sec/5_conclusions}
+
+\myparagraph{Acknowledgements}
+Claudia Cuttano was supported by the Sustainable Mobility Center (CNMS) which received funding from the European Union Next Generation EU (Piano Nazionale di Ripresa e Resilienza (PNRR), Missione 4 Componente 2 Investimento 1.4 "Potenziamento strutture di ricerca e creazione di "campioni nazionali di R\&S" su alcune Key Enabling Technologies") with grant agreement no. CN\_00000023. 
+
+Gabriele Trivigno, Giuseppe Averta and Carlo Masone were supported by FAIR - Future Artificial Intelligence Research which received funding from the European Union Next-GenerationEU (PIANO NAZIONALE DI RIPRESA E RESILIENZA (PNRR) – MISSIONE 4 COMPONENTE 2, INVESTIMENTO 1.3 – D.D. 1555 11/10/2022, PE00000013).  This manuscript reflects only the authors’ views and opinions, neither the European Union nor the European Commission can be considered responsible for them.
+
+We acknowledge the CINECA award
+under the ISCRA initiative, for the availability of high performance computing resources.
+
+%\input{sec/X_checklist}
+{
+    \small
+    \bibliographystyle{abbrv}
+    \bibliography{main}
+}
+
+\newpage
+
+\input{sec/6_supp}
+
+\newpage
+
+\end{document}

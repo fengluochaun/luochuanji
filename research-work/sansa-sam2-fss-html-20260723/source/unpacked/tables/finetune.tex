@@ -1,0 +1,18 @@
+\begin{table}[h]
+\centering
+\caption{\textbf{Comparison of adaptation strategies}. We compare various strategies for adapting SAM2 in terms of generalization to unseen classes (out-of-domain) and performance on seen classes (in-domain). \ours{} achieves the best out-of-domain mIoU with minimal parameter overhead, while preserving the original \sam{} weights.}
+
+\vspace{3pt}
+\label{tab:finetune}
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{\textbf{Adaptation Strategy}} & \multicolumn{2}{c}{\textbf{COCO-20$^i$}} & \multirow{1}{*}{\textbf{Trainable}} & \multirow{1}{*}{\textbf{\sam{} Weights}} \\
+& \textbf{in-domain} & \textbf{out-of-domain} & \textbf{Parameters} & \textbf{Update} \\
+\midrule
+Decoder Finetuning        & 63.7 & 52.1  & 4 M   & \checkmark \\
+QKV-only Finetuning       & 73.5   & 55.3     & 50 M & \checkmark \\
+Backbone Finetuning       & 74.8  & 55.2  & 210 M & \checkmark \\
+AdaptFormer (\textbf{\ours}) &  {72.0}   & {60.2} & 10 M  & \ding{55} \\
+\bottomrule
+\end{tabular}
+\end{table}

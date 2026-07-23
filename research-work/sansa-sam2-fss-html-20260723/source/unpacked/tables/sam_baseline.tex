@@ -1,0 +1,29 @@
+\begin{table}[h]
+\centering
+\caption{\textbf{Performance comparison of Segment Anything-based methods replacing SAM with SAM2.} These methods prompt SAM at image-level, hence SAM2 additional capabilities (\eg mask propagation) play no role in this setting. As a result, \sam{} provides only minimal gains for existing two-stage methods (Matcher \cite{liu2023matcher}, GF-SAM \cite{zhang2024bridge}, VRP-SAM \cite{sun2024vrp}).}
+\vspace{3pt}
+\resizebox{0.64\linewidth}{!}{%
+\begin{tabular}{l|cc|c}
+\toprule
+\multirow{2}{*}{\textbf{Method}} & \textbf{Feature Matching} & \textbf{Segmentation} & \textbf{mIoU} \\
+ & \textbf{Backbone} & \textbf{Model} & \textbf{(\%)} \\
+\midrule
+\multirow{2}{*}{PerSAM \cite{zhang2023personalize}} & \multicolumn{2}{c|}{SAM} & 23.0 \\
+& \multicolumn{2}{c|}{SAM2} & 23.6 \\
+
+\midrule
+\multirow{2}{*}{Matcher \cite{liu2023matcher}} & \multirow{2}{*}{DINOv2} & SAM & 52.7 \\
+&  & SAM2 & 52.4 \\
+\midrule
+\multirow{2}{*}{VRP-SAM \cite{sun2024vrp}} & \multirow{2}{*}{ResNet50} & SAM & 53.9 \\
+ &  & SAM2 & 54.3 \\
+\midrule
+\multirow{2}{*}{GF-SAM \cite{zhang2024bridge}} & \multirow{2}{*}{DINOv2} & SAM & 58.7 \\
+ &  & SAM2 & 58.9 \\
+\midrule
+SANSA (\textbf{ours}) & \multicolumn{2}{c|}{SAM2} & \textbf{60.2} \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:baseline_sam2}
+\end{table}

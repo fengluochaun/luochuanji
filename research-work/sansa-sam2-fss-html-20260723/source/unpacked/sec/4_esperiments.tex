@@ -1,0 +1,92 @@
+\section{Experiments}
+\label{sec:experiments}
+
+\myparagraph{Implementation details}
+We employ SAM2 with Hiera-Large \cite{ryali2023hiera} as encoder. AdaptFormer \cite{chen2022adaptformer} is inserted into the last two blocks, with hidden size set to $0.3\times$ the block channel dimension in the strict few-shot setting and $0.8\times$ in the generalist. \sam{} is frozen, and \textbf{only the adapters are trained} ($\sim$10M params in the strict case and $\sim$25M in the generalist). We train with AdamW and learning rate $10^{-4}$ for 5 epochs (strict) and 20 (generalist), with $k{=}1$ (a single annotated reference) and sequence length $J{=}3$. The same model is evaluated on 1-shot and 5-shot. Full details are in~\cref{sec:supp_implementation}.
+
+
+
+
+
+
+\myparagraph{Datasets}
+\textbf{COCO-20$^i$} \cite{nguyen2019feature} is built on MSCOCO \cite{lin2014microsoft} and consists of 80 classes split into four folds, each with 20 classes. 
+\textbf{FSS-1000} \cite{gao2022mutually} contains 1000 classes, with 520 for training, 240 for validation, and 240 for testing.
+\textbf{LVIS-92$^i$} \cite{liu2023matcher} is more challenging, selecting 920 classes from LVIS \cite{gupta2019lvis}, divided in 10 folds. 
+\textbf{PASCAL-Part} \cite{liu2023matcher} includes four superclasses with 56 object parts across 15 classes.
+\textbf{PACO-Part} is built from PACO \cite{ramanathan2023paco} and contains 303 classes, split in four folds. 
+
+\subsection{Strict Few-Shot Segmentation Setting}
+
+We first evaluate our method in strict FSS setting. Following standard protocols \cite{wang2023amf, sun2024vrp, shi2022dense}, we train on base classes and evaluate on \textbf{novel} classes with \textit{k}-shots. These experiment address the question of whether the \textit{semantic mapping} learned on base classes can transfer meaningfully to novel categories. 
+
+
+\input{tables/strict_few_shot}
+
+\myparagraph{Few-shot segmentation}
+In \cref{tab:strict_few_shot}, we compare \ours{}, besides specialist models, such as AMFormer \cite{wang2023amf} and HMNet \cite{xu2025hybrid}, with the most relevant and recent approaches based on Foundation Models. These include methods that, like ours, leverage a single Foundation Model, such as SegIC \cite{meng2024segic} and DiffewS \cite{zhu2024unleashing}, as well as modular two-stage pipelines like VRP-SAM \cite{sun2024vrp}. For completeness, we also report results from generalist \textit{training-free} methods built on DINOv2 and SAM, including PerSAM \cite{zhang2023personalize}, Matcher \cite{liu2023matcher}, GF-SAM \cite{zhang2024bridge}, as well as our baseline, \textit{i.e.} frozen \sam{}.
+
+
+In the one-shot setting, \ours{} consistently outperforms all prior methods, demonstrating superior generalization to unseen classes. Specifically, we surpass the best direct competitors SegIC, VRP-SAM and DiffwS by +8.3\%, +6.3\%, and +1.2\% on LVIS-92$^i$, COCO-20$^i$, and FSS-1000, respectively. This performance gap remains consistent also against training-free approaches: compared to GF-SAM, \ours{} achieves gains of +13.6\%, +1.5\%, and +3.4\%.
+On the challenging LVIS-92$^i$, including 920 fine-grained categories (e.g., \textit{bulldog}, \textit{dalmatian}), DINO-based methods (SegIC, GF-SAM, Matcher) tend to underperform, possibly due to DINO overly-semantic features \cite{engstler2023understanding, zhang2023tale} (\textit{e.g.}, grouping distinct breeds  under the concept of “dog”). Here, \ours{} achieves a substantial +8.3\% gain, suggesting that \sam{} encodes a latent hierarchical semantic structure, capturing both high-level semantic concepts (dominant in COCO-20$^i$) and fine-grained distinctions (crucial for LVIS-92$^i$). 
+
+Regarding the 5-shot setting, we note that SegIC and VRP-SAM do not provide an inference pipeline to extend to $k$-shot. In contrast, \ours{} natively models correspondences across multiple reference frames and it outperforms the best competitor, DiffewS, by +10.2\% and +3.6\% on LVIS-92$^i$ and COCO-20$^i$, respectively. Compared to training-free models, SANSA shows improvements of +9.7\%, +3.2\%, on LVIS-92$^i$ and FSS-1000, while suffering a -2.5\% gap on COCO-20$^i$ w.r.t. GF-SAM.
+We also report results of upgrading SAM-based baselines to SAM2 in \cref{sec:supp_backbone}.
+
+\input{tables/promptable_seg}
+
+\myparagraph{Performance-Efficiency Trade-off}
+In \cref{fig:fps_new}, we analyze the trade-off between model size, inference speed (img/s), and performance. \ours{} achieves state-of-the-art results while being the most lightweight solution. Specifically, it is: \textit{i)} over 3× faster than the direct competing method (GF-SAM), \textit{ii)} more compact, introducing only adapter parameters on top of \sam{} (totaling 234M), and \textit{iii)} substantially more accurate, outperforming GF-SAM by +13.6\% mIoU on the challenging LVIS-92$^i$ benchmark.
+Importantly, \ours{} keeps the SAM2 architecture entirely frozen, meaning that by storing only the adapter weights, it retains \sam{} state-of-the-art performance on Video Object Segmentation while also achieving top-tier results on few-shot segmentation within a single model. A large-scale annotation study quantifying speed/quality trade-offs is presented in~\cref{sec:supp_scalable}.
+
+
+\myparagraph{One-Shot Promptable Segmentation}
+Our framework keeps \sam{} decoder frozen, maintaining its capability to generate masks from any prompt (\ie points, scribbles, or boxes). As such, during inference, users can segment reference objects by providing a simple point, without requiring costly pixel-level masks. In \cref{fig:promptable_combined} we evaluate the performance with different prompts on strict FSS setting on COCO-20$^i$ against VRP-SAM, which also supports such prompts.
+\ours{} shows gains of +15.0\%, +4.6\%, and +5.8\% when using points, scribbles, and boxes as annotations. More importantly, the performance drop from masks to point prompts is substantially smaller for \ours{} (-6.8\%) compared to VRP-SAM (-15.5\%). We attribute this to the tightly coupled design of our architecture, which maximizes feature reuse by jointly leveraging the same representations for prompt encoding, feature matching, and mask decoding. Prompt generation details and qualitative results are in~\cref{sec:supp_qualitative}.
+
+
+
+\subsection{Generalist In-Context Setting}
+\label{sec:in_context}
+
+Following recent few-shot segmentation works \cite{meng2024segic, zhu2024unleashing, liu2023matcher, zhang2024bridge}, we evaluate \ours{} in the in-context segmentation setting, where a single generalist model is tested across multiple benchmarks (\textit{cf}. \cref{tab:main_table_generalist}). Given the lack of a standardized training protocol, we explicitly report additional datasets used by each method beyond ADE20K and COCO, which are shared across all approaches.
+We evaluate three configurations of our approach: \textit{i)} a minimal setup using only COCO and ADE20K, \textit{ii)} an extended version incorporating LVIS, following the setup of SegIC \cite{meng2024segic}, and \textit{iii)} a variant including PACO to mitigate object-level bias and reinforce part segmentation capabilities.
+
+
+
+When trained only on COCO and ADE20K coarse categories, \ours{} exhibits strong out-of-domain generalization on the LVIS benchmark, outperforming DiffewS and SINE by +4.8\% and +5.0\%, respectively. Moreover, when LVIS is included in the training set (matching SegIC in-domain setup), \ours{} further improves performance and surpasses SegIC by +5.4\%.
+Despite not being trained at the part level, \ours{} exhibits strong cross-task generalization capabilities, surpassing generalist baselines by a large margin (+7.5\% and +8.4\% over DiffewS, the best competitor on Pascal-Part and Paco-Part, respectively), including those trained on part segmentation datasets \cite{wang2023seggpt, liu2024simple}. Our method is only outperformed by training-free models, which, by design, are not biased by object-level training. To address this bias, we follow \cite{wang2023seggpt, liu2024simple} and augment our training set with PACO, leading to +6.7\% on Paco-Part (in-domain) and +4.6\% on Pascal-Part (out-of-domain) against the strong baseline of GF-SAM. Finally, we highlight that, within the generalist model category, \ours{} is the most compact solution, with only 250 M parameters.
+
+\input{tables/generalist}
+
+\subsection{Generalization across domains and styles}
+To explore how \ours{} generalizes beyond the scope of standard benchmarks, we follow \cite{sun2024vrp, liu2023matcher} and present qualitative examples drawn from in-the-wild image pairs, shown in \cref{fig:wild}. In each case, the model is tasked with few-shot segmentation using a reference image from COCO \cite{lin2014microsoft} and a target image collected from the web, offering a complementary view to benchmark evaluations.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.95\linewidth]{images/wild.pdf}
+    \caption{\textbf{Few-shot segmentation with SANSA in-the-wild}. These examples showcase \ours{} ability to handle alternative types of challenges not typically covered by standard benchmarks, such as domain shifts (\textit{e.g.}, real-world to cartoon) and style variations (\textit{e.g.}, photos to sketches).}
+    \label{fig:wild}
+\end{figure}
+
+These examples introduce a different challenge compared to traditional benchmarks, focusing on domain and style shifts, such as when the target image is a cartoon or stylized sketch, or when the visual appearance changes dramatically between the reference and target. These results demonstrate \ours{} strong generalization. Importantly, this robustness across domains and styles is inherited from the frozen \sam{}. Our method preserves this capability by learning a semantic mapping within the frozen feature space, enabling reliable correspondence even under significant distribution shifts.
+
+\subsection{Ablation studies}
+\input{tables/complete_ablation}
+
+We investigate three central aspects of our design: adaptation vs.\ fine-tuning, adapter architecture and capacity, and adapter placement. Results are summarized in \cref{tab:ablations}.
+
+\textbf{Why adaptation instead of fine-tuning?} A central question of our work is how to distill knowledge from a pretrained model (\textit{i.e.}, \sam{}) while preserving generalization, a key challenge in FSS.
+To this end, we evaluate fine-tuning strategies targeting the decoder, QKV projections, backbone, and full model, and compare them with inserting adapters into frozen weights. Results show that adaptation outperforms fine-tuning, indicating that it better preserves \sam{} pretrained priors, shifting the embedding space toward task-relevant semantics without altering the underlying representations. 
+
+\textbf{What makes an adaptation strategy effective?}  
+Basic adapters such as LoRA~\cite{hu2022lora}, Adapter~\cite{houlsby2019adapter}, and AdaptFormer~\cite{chen2022adaptformer} all yield similar gains around $\sim$27\% mIoU over frozen \sam{}. The slight gains ($\sim$2\%) with Adapter and AdaptFormer w.r.t. LoRA suggest that a simple non-linearity can refine this structure but not fundamentally reshape it. By contrast, increasing adapter capacity, either by enlarging the bottleneck or using more complex designs such as MONA~\cite{yin20255}, reduces generalization. These results show that effective adaptation thus requires simplicity and constraint: low-capacity, bottlenecked modules best expose \sam{} latent semantics, while excessive capacity tends to overfit.
+
+
+\textbf{Where should adapters be placed?}  
+Prior works often insert adapters throughout the entire backbone. In our case, we find that adapting only the last two stages is sufficient, as these layers already capture high-level semantic information, which is the focus of our disentanglement objective.
+
+Additional ablations, including backbone scale and training objective, are provided in~\cref{sec:supp_backbone}.
+
+
+

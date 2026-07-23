@@ -1,0 +1,30 @@
+\begin{table*}
+\begin{center}
+\caption{\textbf{Performance of \ours{} against Generalist In-context models}. Excluding training-free approaches, all methods are trained on COCO and ADE20k, and we report additional training datasets for each one.  SegIC (*) uses additional supervision via a textual meta-prompt at test time.}
+\label{tab:main_table_generalist}
+\begin{adjustbox}{width=.96\linewidth}
+\setlength\tabcolsep{4pt}
+\begin{tabular}{lcr|cc|cc|cc|cc}
+&&&  \multicolumn{6}{c|}{\emph{few-shot segmentation}} & \multicolumn{2}{c}{\emph{part seg.}} \\
+\multirow{2}{*}{Method} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}} Additional \\ Datasets \end{tabular}} & \multirow{2}{*}{Params} & \multicolumn{2}{c|}{LVIS-92$^i$} & \multicolumn{2}{c|}{COCO-20$^i$} & \multicolumn{2}{c|}{FSS-1000} & Pascal & PACO \\
+& & & 1-shot & 5-shot & 1-shot & 5-shot & 1-shot & 5-shot & Part & Part \\
+\midrule 
+\multicolumn{3}{l|}{\emph{Training-free methods}} &&&&&&& \\
+~~Matcher \cite{liu2023matcher} & \textit{n.a.} & 945M  & 33.0 & 40.0 & 52.7 & 60.7 & 87.0 & 89.6 & 42.9 & 34.7 \\
+~~GF-SAM \cite{zhang2024bridge} & \textit{n.a.} & 945M & 35.2 & 44.2 & {58.7} & {66.8} & 88.0 & 88.9  &  {44.5} & {36.3} \\
+\midrule
+~~Painter \cite{wang2023images} & \makecell{NYUv2} & 354 M  & 10.5 & 10.9 & 33.1 & 32.6 & 61.7 & 62.3 & 30.4 & 14.1 \\
+~~SegGPT \cite{wang2023seggpt}  & \makecell{Pascal, PACO} & 354 M  & 18.6 & 25.4 & 56.1 & 67.9 & 85.6 & 89.3 & 35.8 & 13.5 \\
+~~SINE \cite{liu2024simple}  & \makecell{Object365, PACO} & 373 M  & 31.2 & 35.5 & 64.5 & 66.1 & - & - & 36.2 & - \\
+~~DiffewS \cite{zhu2024unleashing}  & \makecell{Pascal} & 890 M  & 31.4 & 35.4 & 71.3 & 72.2 & 87.8 & 88.0 & 34.0 & 22.8 \\
+~~SegIC \cite{meng2024segic}  & \makecell{LVIS} & 1.2 B  & 47.8 & - & {74.5*} & - & 88.4 & - & 31.2 & 18.7 \\
+\midrule
+~~\textbf{\ours} & - & 250 M  & 36.2 & 42.5 & \textbf{76.4} & {77.1} & 88.2 & 89.0 & 40.4 & 29.2 \\
+~~\textbf{\ours} & \makecell{LVIS} & 250 M  & \textbf{53.2} & {58.1} & {74.7} & {76.3} & {89.1} & {89.7} & {41.5} & {31.2} \\
+~~\textbf{\ours} & \makecell{LVIS, PACO} & 250 M  & {50.3} & \textbf{59.0} & {75.6} & \textbf{78.6} & \textbf{90.0} & \textbf{91.0} & \textbf{49.1} & \textbf{43.0} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\vspace{-0.5cm}
+\end{table*}

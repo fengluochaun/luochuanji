@@ -1,0 +1,26 @@
+\begin{table*}[h]
+\centering
+\caption{\textbf{Evaluation on Pascal-5$^i$ and COCO$\rightarrow$Pascal.} We report the mean Intersection-over-Union (mIoU) for each fold and the average across folds. All methods are evaluated in a strict few-shot setting, including both the standard Pascal-5$^i$ benchmark and the distribution-shift setting (COCO$\rightarrow$Pascal), where models are trained on COCO-20$^i$ and tested on Pascal-5$^i$. $^{\dagger}$ indicates training-free methods.}
+\label{tab:pascal}
+\setlength{\tabcolsep}{3pt}  % Slightly wider columns
+\renewcommand{\arraystretch}{1.1}  % More breathable rows
+\begin{adjustbox}{max width=0.9\textwidth, center}
+\begin{tabular}{lccccc|cccccc}
+\toprule
+\multirow{2}{*}{Method} & \multicolumn{5}{c|}{\textbf{Pascal-5$^i$}} & \multicolumn{5}{c}{\textbf{COCO$\rightarrow$Pascal}} \\
+&  fold0 & fold1 & fold2 & fold3 & mean & fold0 & fold1 & fold2 & fold3 & mean \\
+\midrule
+~~HSNet \cite{Min_2021_ICCV} \pub{ICCV'21} &  67.3 & 72.3 & 62.0 & 63.1 & 66.2 & 47.0 & 65.2 & 67.1 & 77.1 & 64.1 \\
+~~VAT \cite{hong2022cost} \pub{ECCV'22} & 70.0 & 72.5 & 64.8 & 64.2 & 67.9 & 68.3 & 64.9 & 67.5 & 79.8 & 65.1 \\
+~~AMFormer \cite{wang2023amf} \pub{NIPS'23} & 71.3 & 76.7 & 70.7 & 63.9 & 70.7 & --   & --   & --   & --  & --\\
+~~AENet \cite{xu2024eliminating} \pub{ECCV'24}  & 72.2 & 75.5 & 68.5 & 63.1 & 69.8 & --   & --   & --   & --  & -- \\
+~~HMNet \cite{xu2025hybrid} \pub{NIPS'24} &  72.2 & 75.4 & 70.0 & 63.9 & 70.4 & --   & --   & --   & --  & --\\ 
+~~PMNet \cite{chen2024pixel} \pub{WACV'24} &  71.3 & 72.4 & 66.9 & 61.9 & 68.1 & 71.0 & 72.3 & 66.6 & 63.8 & 68.4 \\ 
+~~Matcher$^{\dagger}$ \cite{liu2023matcher}  \pub{ICLR'24} & 67.7 & 70.7 & 66.9 & 67.0 & 68.1 & 67.7 & 70.7 & 66.9 & 67.0 & 68.1 \\
+~~GF-SAM$^{\dagger}$ \cite{zhang2024bridge} \pub{NIPS'24} &  71.1 & 75.7 & 69.2 & 73.3 & \underline{72.1} & 71.1 & 75.7 & 69.2 & 73.3 & \underline{72.1} \\
+\midrule
+~~\ours{} (\textbf{ours})  & 78.1  & 80.0   & 68.3  & 66.1  & \textbf{73.1} & 67.1 & 70.9 & 73.5 & 78.6 & \textbf{72.5} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table*}

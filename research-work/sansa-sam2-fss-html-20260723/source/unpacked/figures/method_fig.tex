@@ -1,0 +1,11 @@
+\begin{figure*}[t]
+\begin{center}
+\includegraphics[width=\linewidth]{images/method.pdf}
+\end{center}
+\vspace{-0.2cm}
+\caption{Overview of \textbf{\ours{}}: Given $k$ annotated reference images and a target image, we construct a pseudo-video by concatenating them, then leverage SAM2 streaming pipeline to process reference frames together with their annotations sequentially. 
+We restructure \sam{} feature space to make its latent semantic structure \textit{explicit}, enabling mask propagation based on \textit{semantic similarity} from reference to target. The emergent semantic structure is visualized by the 3D PCA projection of $\mathcal{F}$.
+}
+\vspace{-0.2cm}
+\label{fig:method}
+\end{figure*}

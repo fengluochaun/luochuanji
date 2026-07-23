@@ -1,0 +1,636 @@
+{
+  "sections": [
+    {
+      "kind": "section",
+      "file": "sec/1_intro.tex",
+      "line": 1,
+      "text": "Introduction"
+    },
+    {
+      "kind": "section",
+      "file": "sec/2_related.tex",
+      "line": 2,
+      "text": "Related works"
+    },
+    {
+      "kind": "section",
+      "file": "sec/3_method.tex",
+      "line": 2,
+      "text": "Method"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/3_method.tex",
+      "line": 46,
+      "text": "SAM2 Feature Adaptation"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/3_method.tex",
+      "line": 68,
+      "text": "Training objective"
+    },
+    {
+      "kind": "section",
+      "file": "sec/4_esperiments.tex",
+      "line": 1,
+      "text": "Experiments"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/4_esperiments.tex",
+      "line": 19,
+      "text": "Strict Few-Shot Segmentation Setting"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/4_esperiments.tex",
+      "line": 49,
+      "text": "Generalist In-Context Setting"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/4_esperiments.tex",
+      "line": 62,
+      "text": "Generalization across domains and styles"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/4_esperiments.tex",
+      "line": 74,
+      "text": "Ablation studies"
+    },
+    {
+      "kind": "section",
+      "file": "sec/5_conclusions.tex",
+      "line": 1,
+      "text": "Conclusions"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 3,
+      "text": "Appendix"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 24,
+      "text": "Discussion"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 26,
+      "text": "Limitations and Future Works"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 30,
+      "text": "Societal Impacts"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 38,
+      "text": "Emergence of Semantic Representations"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 40,
+      "text": "Analyzing Semantic Structure via Principal Component Decomposition"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 61,
+      "text": "Semantic Discriminability and Downstream Transferability"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 80,
+      "text": "Extracting Semantics Without Compromising SAM2 Capabilities"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 98,
+      "text": "Exploring Implicit Semantics in Traditional Video Object Segmentation Methods"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 111,
+      "text": "Scalable and Fast Annotation"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 124,
+      "text": "Baselines and Ablation Studies"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 126,
+      "text": "Evaluating the Impact of SAM2 on Prior SAM-Based Pipelines"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 135,
+      "text": "Experiments with Different Backbones"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 142,
+      "text": "Effect of the Training Objective"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 156,
+      "text": "Additional Datasets and Qualitative Comparison"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 158,
+      "text": "Qualitative Comparison with Prior Methods"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 171,
+      "text": "Additional Experiments: Pascal-5$^i$ and COCO $\\rightarrow$ Pascal"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 184,
+      "text": "Promptable Segmentation: Prompt Generation Process and Qualitative Results"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 198,
+      "text": "Exploratory Analysis: Negative Prompts"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 242,
+      "text": "Part Segmentation: Qualitative Results"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 253,
+      "text": "Exploring Dependence on Spatial Continuity in SAM2"
+    },
+    {
+      "kind": "section",
+      "file": "sec/6_supp.tex",
+      "line": 288,
+      "text": "Implementation and Reproducibility"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 291,
+      "text": "Implementation details"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 324,
+      "text": "Clarification of Few-Shot Segmentation Evaluation Settings"
+    },
+    {
+      "kind": "subsection",
+      "file": "sec/6_supp.tex",
+      "line": 340,
+      "text": "Datasets"
+    }
+  ],
+  "figures": [
+    {
+      "kind": "figure",
+      "file": "figures/feat_analysis_new.tex",
+      "line": 1,
+      "text": "\\begin{figure}[h] \\centering \\includegraphics[width=.7\\textwidth]{images/sam2_miou.pdf} \\caption{Left: \\textbf{Linear probing} for Semantic Segmentation on a fold of COCO-20$^i$, comparing frozen \\sam{} and \\ours{} (trained on a disjoint class set)"
+    },
+    {
+      "kind": "figure*",
+      "file": "figures/method_fig.tex",
+      "line": 1,
+      "text": "\\begin{figure*}[t] \\begin{center} \\includegraphics[width=\\linewidth]{images/method.pdf} \\end{center} \\vspace{-0.2cm} \\caption{Overview of \\textbf{\\ours{}}: Given $k$ annotated reference images and a target image, we construct a pseudo-video by concatenating th"
+    },
+    {
+      "kind": "figure",
+      "file": "figures/pca.tex",
+      "line": 1,
+      "text": "\\begin{figure} \\centering \\includegraphics[width=.8\\textwidth]{images/pca.pdf} \\caption{\\textbf{ Semantic information concentration across principal components.} (a) We evaluate how semantic information is distributed across the principal component"
+    },
+    {
+      "kind": "figure*",
+      "file": "figures/teaser.tex",
+      "line": 1,
+      "text": "\\begin{figure*}[t] \\centering \\begin{minipage}{0.47\\textwidth} \\centering \\includegraphics[width=\\textwidth]{images/teaser1.pdf} \\caption{We evaluate frozen \\sam{} on few-shot segmentation tasks on four datasets with varying degrees of semantic variabi"
+    },
+    {
+      "kind": "figure",
+      "file": "sec/3_method.tex",
+      "line": 91,
+      "text": "\\begin{figure}[t] \\centering \\includegraphics[width=0.9\\linewidth]{images/semantic_correspondence.pdf} \\caption{\\textbf{Semantic structure of feature space.} (a) PCA visualization of frozen SAM2 and our \\ours{} features on a COCO fold with \\textit{"
+    },
+    {
+      "kind": "figure",
+      "file": "sec/4_esperiments.tex",
+      "line": 65,
+      "text": "\\begin{figure}[h] \\centering \\includegraphics[width=0.95\\linewidth]{images/wild.pdf} \\caption{\\textbf{Few-shot segmentation with SANSA in-the-wild}. These examples showcase \\ours{} ability to handle alternative types of challenges not typically cov"
+    },
+    {
+      "kind": "figure",
+      "file": "sec/6_supp.tex",
+      "line": 161,
+      "text": "\\begin{figure}[h] \\centering \\includegraphics[width=0.99\\linewidth]{images/qualitatives_comparison.pdf} \\caption{\\textbf{Qualitative comparison on the LVIS-92$^i$ benchmark.} For each example, we show: the annotated reference, the target image, pre"
+    },
+    {
+      "kind": "figure*",
+      "file": "sec/6_supp.tex",
+      "line": 190,
+      "text": "\\begin{figure*}[h] \\begin{center} \\includegraphics[width=\\linewidth]{images/supp_prompt_compr.pdf} \\end{center} \\caption{\\textbf{Qualitative results for one-shot few-shot promptable segmentation.} The figure illustrates segmentation results using different typ"
+    },
+    {
+      "kind": "figure*",
+      "file": "sec/6_supp.tex",
+      "line": 245,
+      "text": "\\begin{figure*}[h] \\begin{center} \\includegraphics[width=\\linewidth]{images/supp_part_compr.pdf} \\end{center} \\caption{\\textbf{Qualitative results for one-shot part segmentation.} Examples from Pascal-Part.} \\label{fig:supp_part} \\end{figure*} \\section{Explo"
+    },
+    {
+      "kind": "figure*",
+      "file": "tables/promptable_seg.tex",
+      "line": 1,
+      "text": "\\begin{figure*}[t] \\centering \\begin{minipage}{0.47\\textwidth} \\centering \\includegraphics[width=\\textwidth]{images/miou_vs_fps.pdf} \\vspace{-15pt} \\captionof{figure}{\\textbf{Comparison of inference speed and mIoU}, with bub"
+    }
+  ],
+  "tables": [
+    {
+      "kind": "table",
+      "file": "sec/6_supp.tex",
+      "line": 217,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Exploratory results with negative prompts on COCO-20$^i$.} Geometric negatives act as test-time corrections. Semantic negatives provide contrastive context.} \\vspace{6pt} \\begin{tabular}{lc} \\toprule Method & mIoU \\"
+    },
+    {
+      "kind": "table",
+      "file": "sec/6_supp.tex",
+      "line": 268,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Spatial coherence across varying continuity conditions.} Lower is better.} \\vspace{0.5em} \\resizebox{0.8\\linewidth}{!}{ \\begin{tabular}{lccccc} \\toprule \\multirow{2}{*}{Setting} & \\multicolumn{2}{c}{Continuity} & \\m"
+    },
+    {
+      "kind": "table",
+      "file": "sec/6_supp.tex",
+      "line": 298,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Summary of architecture and training hyperparameters.}} \\vspace{0.5em} \\begin{tabular}{ll} \\toprule \\textbf{Component} & \\textbf{Value / Description} \\\\ \\midrule Base model & SAM2 (frozen) \\\\ Visual encoder & Hiera-"
+    },
+    {
+      "kind": "table",
+      "file": "tables/ablation_loss.tex",
+      "line": 1,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Ablation on training sequence length $J$.} Using $J>1$ improves over the standard few-shot objective ($J=1$). Gains saturate at $J=3$--$4$, which we use as default.} \\vspace{0.5em} \\begin{tabular}{lcc} \\toprule $J$"
+    },
+    {
+      "kind": "table",
+      "file": "tables/annotation_time.tex",
+      "line": 1,
+      "text": "\\begin{table}[h] \\caption{\\textbf{Evaluation of large-scale annotation efficiency on COCO-20$^i$ and LVIS-92$^i$ datasets.} We report mIoU and wall-clock annotation time (minutes) required to segment 10,000 target images using reference examples from unseen"
+    },
+    {
+      "kind": "table",
+      "file": "tables/complete_ablation.tex",
+      "line": 1,
+      "text": "\\begin{table}[t] \\centering \\caption{Ablation on COCO-20$^i$. \\textbf{Left:} fine-tuning underperforms adaptation. \\textbf{Middle:} simple adapters yield strong gains, while higher capacity (larger bottlenecks or added complexity, \\textit{e.g.}, MONA) hurts"
+    },
+    {
+      "kind": "table",
+      "file": "tables/different_backbones.tex",
+      "line": 1,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Comparison of model parameters, inference speed (FPS), and mIoU} for different scales of the SAM2 encoder (Tiny, Base, Large) using Hiera. FPS are measured on an NVIDIA RTX 4090.} \\vspace{3pt} \\begin"
+    },
+    {
+      "kind": "table",
+      "file": "tables/finetune.tex",
+      "line": 1,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Comparison of adaptation strategies}. We compare various strategies for adapting SAM2 in terms of generalization to unseen classes (out-of-domain) and performance on seen classes (in-domain). \\ours{} achieves the be"
+    },
+    {
+      "kind": "table*",
+      "file": "tables/generalist.tex",
+      "line": 1,
+      "text": "\\begin{table*} \\begin{center} \\caption{\\textbf{Performance of \\ours{} against Generalist In-context models}. Excluding training-free approaches, all methods are trained on COCO and ADE20k, and we report additional training datasets for each one. SegIC (*) use"
+    },
+    {
+      "kind": "table*",
+      "file": "tables/pascal.tex",
+      "line": 1,
+      "text": "\\begin{table*}[h] \\centering \\caption{\\textbf{Evaluation on Pascal-5$^i$ and COCO$\\rightarrow$Pascal.} We report the mean Intersection-over-Union (mIoU) for each fold and the average across folds. All methods are evaluated in a strict few-shot setting, includi"
+    },
+    {
+      "kind": "table",
+      "file": "tables/sam_baseline.tex",
+      "line": 1,
+      "text": "\\begin{table}[h] \\centering \\caption{\\textbf{Performance comparison of Segment Anything-based methods replacing SAM with SAM2.} These methods prompt SAM at image-level, hence SAM2 additional capabilities (\\eg mask propagation) play no role in this setting. As"
+    },
+    {
+      "kind": "table*",
+      "file": "tables/strict_few_shot.tex",
+      "line": 1,
+      "text": "\\begin{table*} \\begin{center} \\setlength{\\tabcolsep}{2pt} \\caption{\\textbf{Strict Few-Shot Segmentation setting}. Results for $k$-shot segmentation on LVIS-92$^i$, COCO-20$^i$, and FSS-1000. We include both specialist models and approaches based on foundation"
+    },
+    {
+      "kind": "table",
+      "file": "tables/vos.tex",
+      "line": 3,
+      "text": "\\begin{table}[h] \\begin{center} \\caption{\\textbf{Evaluation of traditional Video Object Segmentation methods and \\sam{} with and without SANSA adaptation.} We report mIoU (\\ \\vspace{3pt} \\resizebox{0.65\\linewidth}{!}{ \\b"
+    }
+  ],
+  "algorithms": [],
+  "equations": [
+    {
+      "kind": "equation",
+      "file": "sec/3_method.tex",
+      "line": 11,
+      "text": "\\begin{equation} \\mathcal{M} = [x^k_r, a^k_r]^K_{k=1} \\cup [x_t, \\varnothing], \\end{equation} where only the $k$ reference frames are annotated. \\subsection{From Object Tracking to Semantic Tracking with \\sam{}} \\label{sec:preliminaries} Segment Anythi"
+    },
+    {
+      "kind": "equation",
+      "file": "sec/3_method.tex",
+      "line": 26,
+      "text": "\\begin{equation} \\mathcal{I}_r^k = \\mathcal{F}_r^k + \\texttt{conv\\_down}(\\hat{y}_r^k). \\label{eq:mem_representation} \\end{equation} This representation is stored in the \\texttt{Memory Bank}. Subsequently, the features $\\mathcal{F}_t$ of target unannota"
+    },
+    {
+      "kind": "equation",
+      "file": "sec/3_method.tex",
+      "line": 31,
+      "text": "\\begin{equation} \\label{eq:mem_att} \\mathcal{F}_{t, \\texttt{match}} = \\text{Attention} \\big( Q(\\mathcal{F}_t) K([\\mathcal{I}_r^0, ..., \\mathcal{I}_r^{k}])^T \\big) V([\\mathcal{I}_r^0, ..., \\mathcal{I}_r^{k}]), \\end{equation} where \\( \\mathcal{I}_r^k \\) are past"
+    },
+    {
+      "kind": "equation",
+      "file": "sec/3_method.tex",
+      "line": 55,
+      "text": "\\begin{equation} \\mathcal{A}(x) = \\sigma(x \\cdot \\mathbf{W}_{down}) \\cdot \\mathbf{W}_{up}, \\end{equation} where $\\sigma$ is a ReLu and $\\tilde{d} < d$ is the bottleneck dimensionality. The adapted features are summed in a residual fashion in the backbone trans"
+    },
+    {
+      "kind": "align",
+      "file": "sec/3_method.tex",
+      "line": 60,
+      "text": "\\begin{align} x_{\\text{self}} &= \\mathrm{Attention}(x), \\\\ x' = \\mathrm{MLP}&(x_{\\text{self}}) + x_{\\text{self}} + \\mathcal{A}(x_{\\text{self}}), \\end{align} The backbone weights are kept frozen and we only train projections $\\mathbf{W}_{down}$ and $\\mathbf{W}_"
+    },
+    {
+      "kind": "equation",
+      "file": "sec/3_method.tex",
+      "line": 74,
+      "text": "\\begin{equation} \\mathcal{M}_{train} = [x_r, a_r] \\cup [x^j_t, \\varnothing]^J_{j=1}, \\end{equation} where $\\{ x_r, a_r\\}$ is the annotated reference image and $\\{ x^j_t\\}_{j=1}^J$, are the $J$ unlabeled target images. We feed $\\mathcal{M}_{train}$ to our mode"
+    }
+  ],
+  "graphics": [
+    {
+      "kind": "includegraphics",
+      "file": "figures/feat_analysis_new.tex",
+      "line": 3,
+      "text": "images/sam2_miou.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "figures/method_fig.tex",
+      "line": 3,
+      "text": "images/method.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "figures/pca.tex",
+      "line": 3,
+      "text": "images/pca.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "figures/teaser.tex",
+      "line": 5,
+      "text": "images/teaser1.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "figures/teaser.tex",
+      "line": 12,
+      "text": "images/teaser2.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "sec/3_method.tex",
+      "line": 93,
+      "text": "images/semantic_correspondence.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "sec/4_esperiments.tex",
+      "line": 67,
+      "text": "images/wild.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "sec/6_supp.tex",
+      "line": 163,
+      "text": "images/qualitatives_comparison.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "sec/6_supp.tex",
+      "line": 192,
+      "text": "images/supp_prompt_compr.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "sec/6_supp.tex",
+      "line": 247,
+      "text": "images/supp_part_compr.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "tables/promptable_seg.tex",
+      "line": 6,
+      "text": "images/miou_vs_fps.pdf"
+    },
+    {
+      "kind": "includegraphics",
+      "file": "tables/promptable_seg.tex",
+      "line": 31,
+      "text": "images/promptable.pdf"
+    }
+  ],
+  "captions": [
+    {
+      "kind": "caption",
+      "file": "figures/feat_analysis_new.tex",
+      "line": 4,
+      "text": "Left: \\textbf{Linear probing} for Semantic Segmentation on a fold of COCO-20$^i$, comparing frozen \\sam{} and \\ours{} (trained on a disjoint class set). Right: \\textbf{Few-shot segmentation performance on the same set of data.} Despite poor performance on few-shot segmentation, a simple linear layer (\\textit{cf} linear probing) can learn to discriminate semantic-classes from \\sam{} frozen features. These results, tog"
+    },
+    {
+      "kind": "caption",
+      "file": "figures/method_fig.tex",
+      "line": 6,
+      "text": "Overview of \\textbf{\\ours{}}: Given $k$ annotated reference images and a target image, we construct a pseudo-video by concatenating them, then leverage SAM2 streaming pipeline to process reference frames together with their annotations sequentially. We restructure \\sam{} feature space to make its latent semantic structure \\textit{explicit}, enabling mask propagation based on \\textit{semantic similarity} from referenc"
+    },
+    {
+      "kind": "caption",
+      "file": "figures/pca.tex",
+      "line": 4,
+      "text": "\\textbf{ Semantic information concentration across principal components.} (a) We evaluate how semantic information is distributed across the principal components of the feature space. For each number of retained components (x-axis), we compute class centroids on COCO-20$^i$ training embeddings and assign test embeddings to the nearest centroid. The y-axis shows the relative classification accuracy, normalized by the "
+    },
+    {
+      "kind": "caption",
+      "file": "figures/teaser.tex",
+      "line": 6,
+      "text": "We evaluate frozen \\sam{} on few-shot segmentation tasks on four datasets with varying degrees of semantic variability. On datasets \\cite{candemir2013lung, codella2019skin} with low semantic shift and high intra-class visual similarity, SAM2 matches or even outperforms state-of-the-art APSeg~\\cite{he2024apseg}. However, on more challenging datasets like COCO and LVIS, with high semantic shift (\\eg, \\textit{cruise shi"
+    },
+    {
+      "kind": "caption",
+      "file": "figures/teaser.tex",
+      "line": 14,
+      "text": "We extract \\sam{} features from object instances across diverse images and visualize their distribution using the first three principal components of PCA, mapped to RGB channels. The features appear entangled, with clusters mixing across categories, highlighting the lack of a coherent semantic structure in the original feature space. After adapting the feature space with SANSA, well-defined clusters emerge: semantica"
+    },
+    {
+      "kind": "caption",
+      "file": "figures/teaser.tex",
+      "line": 18,
+      "text": "Overall figure caption describing all three images."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/3_method.tex",
+      "line": 94,
+      "text": "\\textbf{Semantic structure of feature space.} (a) PCA visualization of frozen SAM2 and our \\ours{} features on a COCO fold with \\textit{unseen} classes, showing the first two principal components color-coded by class. SAM2 features exhibit weak semantic separability, indicating entanglement with other signals. (b) PCA-based RGB visualization of \\ours{} features across images with \\textit{seen} and \\textit{unseen} cat"
+    },
+    {
+      "kind": "caption",
+      "file": "sec/4_esperiments.tex",
+      "line": 68,
+      "text": "\\textbf{Few-shot segmentation with SANSA in-the-wild}. These examples showcase \\ours{} ability to handle alternative types of challenges not typically covered by standard benchmarks, such as domain shifts (\\textit{e.g.}, real-world to cartoon) and style variations (\\textit{e.g.}, photos to sketches)."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/6_supp.tex",
+      "line": 164,
+      "text": "\\textbf{Qualitative comparison on the LVIS-92$^i$ benchmark.} For each example, we show: the annotated reference, the target image, predictions from GF-SAM and SegIC, our SANSA prediction, and the ground truth. The queried class name is shown for clarity, but is not used by any model."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/6_supp.tex",
+      "line": 194,
+      "text": "\\textbf{Qualitative results for one-shot few-shot promptable segmentation.} The figure illustrates segmentation results using different types of prompts. The first row shows examples where the reference object is annotated with a point, the second row uses bounding box annotations, and the third row employs scribble-based annotations. Examples are extracted from COCO-20$^i$."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/6_supp.tex",
+      "line": 219,
+      "text": "\\textbf{Exploratory results with negative prompts on COCO-20$^i$.} Geometric negatives act as test-time corrections. Semantic negatives provide contrastive context."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/6_supp.tex",
+      "line": 249,
+      "text": "\\textbf{Qualitative results for one-shot part segmentation.} Examples from Pascal-Part."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/6_supp.tex",
+      "line": 270,
+      "text": "\\textbf{Spatial coherence across varying continuity conditions.} Lower is better."
+    },
+    {
+      "kind": "caption",
+      "file": "sec/6_supp.tex",
+      "line": 300,
+      "text": "\\textbf{Summary of architecture and training hyperparameters.}"
+    },
+    {
+      "kind": "caption",
+      "file": "tables/ablation_loss.tex",
+      "line": 3,
+      "text": "\\textbf{Ablation on training sequence length $J$.} Using $J>1$ improves over the standard few-shot objective ($J=1$). Gains saturate at $J=3$--$4$, which we use as default."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/annotation_time.tex",
+      "line": 2,
+      "text": "\\textbf{Evaluation of large-scale annotation efficiency on COCO-20$^i$ and LVIS-92$^i$ datasets.} We report mIoU and wall-clock annotation time (minutes) required to segment 10,000 target images using reference examples from unseen categories in fold 0. Reference features are precomputed and reused for fair comparison. Experiments conducted on an NVIDIA RTX 4090. \\ours{} achieves the best trade-off between accuracy a"
+    },
+    {
+      "kind": "caption",
+      "file": "tables/complete_ablation.tex",
+      "line": 3,
+      "text": "Ablation on COCO-20$^i$. \\textbf{Left:} fine-tuning underperforms adaptation. \\textbf{Middle:} simple adapters yield strong gains, while higher capacity (larger bottlenecks or added complexity, \\textit{e.g.}, MONA) hurts generalization. \\textbf{Right:} adapting the last two stages suffices to disentangle semantics."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/different_backbones.tex",
+      "line": 3,
+      "text": "\\textbf{Comparison of model parameters, inference speed (FPS), and mIoU} for different scales of the SAM2 encoder (Tiny, Base, Large) using Hiera. FPS are measured on an NVIDIA RTX 4090."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/finetune.tex",
+      "line": 3,
+      "text": "\\textbf{Comparison of adaptation strategies}. We compare various strategies for adapting SAM2 in terms of generalization to unseen classes (out-of-domain) and performance on seen classes (in-domain). \\ours{} achieves the best out-of-domain mIoU with minimal parameter overhead, while preserving the original \\sam{} weights."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/generalist.tex",
+      "line": 3,
+      "text": "\\textbf{Performance of \\ours{} against Generalist In-context models}. Excluding training-free approaches, all methods are trained on COCO and ADE20k, and we report additional training datasets for each one. SegIC (*) uses additional supervision via a textual meta-prompt at test time."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/pascal.tex",
+      "line": 3,
+      "text": "\\textbf{Evaluation on Pascal-5$^i$ and COCO$\\rightarrow$Pascal.} We report the mean Intersection-over-Union (mIoU) for each fold and the average across folds. All methods are evaluated in a strict few-shot setting, including both the standard Pascal-5$^i$ benchmark and the distribution-shift setting (COCO$\\rightarrow$Pascal), where models are trained on COCO-20$^i$ and tested on Pascal-5$^i$. $^{\\dagger}$ indicates t"
+    },
+    {
+      "kind": "caption",
+      "file": "tables/promptable_seg.tex",
+      "line": 32,
+      "text": "\\textbf{Promptable few-shot segmentation with \\ours{}.} Top: performance in strict few-shot (COCO-20$^i$) using different prompt types compared with VRP-SAM. Bottom: qualitative examples with point, scribble, and box prompts."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/sam_baseline.tex",
+      "line": 3,
+      "text": "\\textbf{Performance comparison of Segment Anything-based methods replacing SAM with SAM2.} These methods prompt SAM at image-level, hence SAM2 additional capabilities (\\eg mask propagation) play no role in this setting. As a result, \\sam{} provides only minimal gains for existing two-stage methods (Matcher \\cite{liu2023matcher}, GF-SAM \\cite{zhang2024bridge}, VRP-SAM \\cite{sun2024vrp})."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/strict_few_shot.tex",
+      "line": 4,
+      "text": "\\textbf{Strict Few-Shot Segmentation setting}. Results for $k$-shot segmentation on LVIS-92$^i$, COCO-20$^i$, and FSS-1000. We include both specialist models and approaches based on foundation models, trained and tested on disjoint classes. Training-free methods are also reported for reference."
+    },
+    {
+      "kind": "caption",
+      "file": "tables/vos.tex",
+      "line": 5,
+      "text": "\\textbf{Evaluation of traditional Video Object Segmentation methods and \\sam{} with and without SANSA adaptation.} We report mIoU (\\"
+    }
+  ],
+  "counts": {
+    "figure": 5,
+    "figure*": 5,
+    "equation": 5,
+    "align": 1,
+    "table": 10,
+    "table*": 3,
+    "tex_files": 22
+  }
+}

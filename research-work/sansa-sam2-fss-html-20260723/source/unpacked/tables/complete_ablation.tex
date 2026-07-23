@@ -1,0 +1,32 @@
+\begin{table}[t]
+\centering
+\caption{Ablation on COCO-20$^i$. 
+\textbf{Left:} fine-tuning underperforms adaptation. 
+\textbf{Middle:} simple adapters yield strong gains, while higher capacity (larger bottlenecks or added complexity, \textit{e.g.}, MONA) hurts generalization.
+\textbf{Right:} adapting the last two stages suffices to disentangle semantics.}
+\vspace{5pt}
+\label{tab:ablations}
+\setlength{\tabcolsep}{6pt} % default is 6pt, increase spacing
+\resizebox{0.95\linewidth}{!}{%
+\begin{tabular}{lrc|lc|lcc}
+\toprule
+\multicolumn{3}{c|}{\textbf{Fine-tuning strategies}} & 
+\multicolumn{2}{c|}{\textbf{Adaptation strategies}} &
+\multicolumn{3}{c}{\textbf{Adapter placement}} \\
+\cmidrule(lr){1-3} \cmidrule(lr){4-5} \cmidrule(lr){6-8}
+\textbf{Method} & \textbf{Params} & \textbf{mIoU} &
+\textbf{Method} & \textbf{mIoU} &
+\textbf{Stages} &  & \textbf{mIoU} \\
+\midrule
+Frozen & 0 & 32.2 & LoRA \cite{hu2022lora} & 58.0 & None & – & 32.2 \\
+From Scratch & 224 M & 37.1 & Adapter \cite{houlsby2019adapter} & 59.4 & All & 0–3 & 59.4 \\
+Full FT & 224 M & 51.6 & MONA \cite{yin20255} & 56.9 & Early & 0–1 & 38.7 \\
+Decoder FT & 4 M & 52.1 & AdaptFormer \cite{chen2022adaptformer} &  & Middle & 1–2 & 57.9 \\
+QKV FT & 50 M & 55.3 & \;\;Bottleneck $0.8\times$ channel dim & 58.2 & Late & 2–3 & \textbf{60.2} \\
+Backbone FT & 210 M & 55.2 & \;\;Bottleneck $0.5\times$ channel dim & 59.6 &  &  &  \\
+SANSA & 10 M & \textbf{60.2} & \;\;Bottleneck $0.3\times$ channel dim & \textbf{60.2} &  &  &  \\
+\bottomrule
+\end{tabular}%
+}
+\setlength{\tabcolsep}{6pt} % reset to default after table
+\end{table}

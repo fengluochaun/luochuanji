@@ -1,0 +1,355 @@
+\clearpage 
+\appendix
+\section*{Appendix}
+
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefalias{section}{appendix}
+\crefalias{subsection}{appendix}
+
+\textbf{Table of Contents:}
+\begin{itemize}
+    \item \S \ref{sec:supp_discussion}: Discussion
+    \item §\ref{sec:supp_emergence}: Emergence of Semantic Representations
+    \item §\ref{sec:supp_scalable}: Scalable and Fast Annotation
+    \item §\ref{sec:supp_backbone}: Baselines and Ablation Studies
+    \item §\ref{sec:supp_qualitative}: Additional Datasets and Qualitative Comparison
+    \item §\ref{sec:supp_spatial_coherence}: Exploratory Analysis: Negative Prompts
+    \item §\ref{sec:supp_negative}: Exploring Dependence on Spatial Continuity in SAM2
+    \item §\ref{sec:supp_implementation}: Implementation and Reproducibility
+\end{itemize}
+
+
+
+\section{Discussion}
+\label{sec:supp_discussion}
+\subsection{Limitations and Future Works}
+By keeping the Segment Anything 2 (SAM2) \cite{ravi2024sam} model entirely frozen and storing only adapter weights, our \ours{} preserves SAM2 state-of-the-art performance on Video Object Segmentation (VOS), while enabling few-shot segmentation within a unified pipeline.
+As our method builds directly upon SAM2, it also inherits its design assumptions and limitations. In particular, while SAM2 supports tracking and segmenting multiple objects across a video, it does so by processing each object independently. This behavior is standard in few-shot segmentation, where each object is typically queried and segmented in isolation using a separate prompt. Nevertheless, future work could explore leveraging contextual relationships between multiple objects, which may improve segmentation accuracy through cross-instance interactions and enable multi-class few-shot segmentation.
+
+\subsection{Societal Impacts}
+Our method leverages the publicly available, pre-trained weights of Segment Anything 2 (SAM2), thus requiring minimal additional computational resources. This significantly limits the environmental impact commonly associated with training large foundation models from scratch. By providing an analysis of the underlying mechanisms of foundation models like SAM2, we contribute to a deeper understanding of their operation and potential applications beyond conventional tasks. We believe this knowledge 
+can foster broader awareness and acceptance of foundation models both within and outside the scientific community.
+
+Moreover, our approach facilitates the efficient annotation of large-scale datasets with minimal human effort (see Section \ref{sec:supp_scalable}). Given that data annotation represents one of the primary bottlenecks and cost drivers in deploying vision models in real-world scenarios, our method could bring benefit in reducing the impact of computational burdens associated with dataset curation.
+
+However, we recognize potential risks inherent to few-shot learning methods, including \ours{}. Specifically, its capability for rapid adaptation with limited data could be exploited in ways that raise ethical and privacy concerns. For example, \ours{} might be applied in surveillance systems to identify individuals without their consent, posing risks to personal privacy and civil liberties. 
+
+\section{Emergence of Semantic Representations}
+\label{sec:supp_emergence}
+\subsection{Analyzing Semantic Structure via Principal Component Decomposition}
+
+Our hypothesis is that \sam{} features \textit{do} encode semantic information, albeit entangled with low-level signals, whereas our adapted \ours{} features disentangle this semantic content to make it \textit{explicit}. To validate this hypothesis, we analyze the feature spaces of both models via a clustering-based experiment, reported in \cref{fig:pca}. Specifically, we evaluate how well semantic clusters form in lower-dimensional subspaces obtained via PCA, comparing frozen \sam{} to our adapted \ours{} features.
+To this end, we extract object-level features from fold 0 of COCO-20$^i$, which contains categories unseen by SANSA (trained on the remaining folds). We then analyze the semantic organization of these features through a clustering-based assignment task combined with Principal Component Analysis (PCA):
+
+\begin{enumerate}
+    \item We apply PCA to the extracted features, varying the number of principal components (PCs) retained, from 2 up to 450, capturing 99\% of the total variance.
+    \item For each reduced-dimensionality representation, class centroids are computed on the training set features using $k$-means clustering.
+    \item During testing, embeddings from the test set are assigned to the nearest centroid based on minimum Euclidean distance.
+    \item The assignment accuracy per class is computed using the ground-truth labels.
+\end{enumerate}
+
+\textbf{Plot (a)} reports the relative assignment accuracy (y-axis) as a function of the number of PCs (x-axis). This accuracy is normalized by the overall accuracy obtained with the full feature space (\textit{i.e.}, no dimensionality reduction) for each method, allowing a direct comparison of how semantic information concentrates across principal components independently of absolute accuracy differences.
+The results reveal a marked difference between SAM2 and SANSA. The blue curve (SAM2) shows a gradual increase in accuracy as more PCs are included, indicating that semantic and non-semantic signals are mixed across many leading components. Conversely, the orange curve (SANSA) exhibits a sharp rise with only a few PCs, revealing that semantic information is concentrated and explicitly encoded in the leading principal components of the adapted feature space.
+
+
+\input{figures/pca}
+
+\textbf{Plots (b)} and \textbf{(c)} provide a visual illustration of this phenomenon by projecting the features onto the first two principal components and coloring them by class label. The frozen SAM2 features, in plot (b), show weak class discriminability, confirming that their semantic structure is entangled with task-specific features optimized for SAM2 original tracking objective. Conversely, SANSA features, in plot (c), form compact, well-separated clusters, indicating that semantic information dominates the main axes of variation in the adapted feature space.
+
+
+\subsection{Semantic Discriminability and Downstream Transferability}
+The previous analysis revealed that in the adapted \ours{} feature space, semantic information is predominantly encoded. This raises a natural follow-up question: \textit{to what extent this semantic information was already encoded in the original, frozen \sam{} features, and how easily can it be accessed for downstream tasks?}
+
+To investigate this, we present a two-fold analysis in \cref{fig:probing}, comparing two models: \textit{i)} frozen \sam{}, and \textit{ii)} our \ours{} trained on folds $1, 2, 3$ of COCO-20$^i$. We conduct two experiments on fold $0$, \ie on \textit{unseen} classes for our model:
+\begin{enumerate}[noitemsep,topsep=2pt,leftmargin=*]
+\item \textbf{Linear probing}: following standard practice in representation learning \cite{he2020momentum, oquab2023dinov2, caron2021emerging}, we conduct a linear probing experiment to assess semantic discriminability in the two feature spaces.  We extract features from both models and train a pixel-level \textbf{linear} classifier on the training set of COCO-20$^i$ fold 0. Note that both models are frozen and only a single linear layer is trained for the task of semantic segmentation. Evaluation is performed on the corresponding validation set. A high mean Intersection-over-Union (mIoU) indicates that semantic signals are present in the feature space and can be recovered by a simple linear projection.
+\item \textbf{Few-Shot Segmentation}: on the same COCO-20$^i$ fold, we test the performance of frozen \sam{} and \ours{} on unseen classes in the downstream task of few-shot segmentation.
+\end{enumerate}
+
+
+
+On the left side of the plot, the results indicate that \sam{} achieves 65.8\% mIoU with a simple linear probe,  confirming that they encode a non-trivial amount of semantic information that is linearly accessible. Interestingly, when repeating the same experiment using our SANSA features, we observe only a modest improvement to 69.2\% mIoU (+3.4\%). 
+
+\input{figures/feat_analysis_new}
+
+On the right, FSS results show that \sam{} achieves 28.9\% mIoU, while \ours{} reaches 57.5\%, with a substantial +28.6\% improvement.
+When considered together, these results highlight a key insight: although \sam{} features already encode meaningful semantic cues, their utility in downstream tasks is limited by the way this information is entangled with low-level and instance-specific signals. 
+The relatively modest gain in linear probing performance (+3.4\%) compared to the substantial improvement in few-shot segmentation (+\textbf{28.6}\%) suggests that SANSA primarily reorganizes the latent structure into an \textit{explicitly} semantic form, enabling downstream tasks that require semantic-level understanding.
+
+\subsection{Extracting Semantics Without Compromising SAM2 Capabilities}
+
+In the previous sections, we investigate how \ours{} exposes the latent semantic structure embedded in frozen \sam{} features, which was our main goal. Moreover, an important principle of our design was to extract this semantic structure without sacrificing \sam{} Promptable Segmentation capabilities or its state-of-the-art performance on Video Object Segmentation. Consequently, our choice was to insert AdaptFormer blocks \cite{chen2022adaptformer} into the last two layers of the frozen \texttt{Image Encoder}, which introduce residual bottleneck projections, reorganizing the feature space without altering any of the \sam{} weights.
+
+For comparison, we evaluate several alternative adaptation strategies: \textit{i)} fine-tuning only the decoder, \textit{ii)} fine-tuning the Query, Key, and Value (QKV) projections within the attention layers \cite{touvron2022three}, and \textit{iii)} full backbone fine-tuning. Decoder fine-tuning updates around 4 million parameters, QKV fine-tuning modifies approximately 50 million parameters, and full backbone fine-tuning involves over 210 million parameters.
+
+\cref{tab:finetune} reports results under two settings: out-of-domain, where models are trained on a subset of COCO-20$^i$ folds and evaluated on unseen classes (\ie, the strict few-shot segmentation setting, which is our primary focus), and in-domain, where models are trained on all categories.
+
+\input{tables/finetune}
+
+The table highlights the advantages of our approach. Tuning the decoder provides sub-optimal results both in- and out-of-domain, as performances are constrained by the limited semantic structure of frozen features. Finetuning the backbone, or the attention layers, is effective in producing semantic aware features, as shown by the in-domain performance. 
+However, such fine-tuning, despite its greater capacity which boosts in-domain performance, leads to overfitting to training categories, as shown by the large performance drop on unseen classes.
+
+On the other hand, adapters restrict updates to a low-dimensional bottleneck \cite{hu2022lora, houlsby2019adapter}, forcing the model to prioritize generalizable transformations over spurious in-domain correlations \cite{he2021effectiveness}, demonstrating more consistent and stable performance across both seen and unseen classes.
+
+
+Finally, by maintaining the \sam{} backbone and decoder entirely frozen, we ensure that the original model core capabilities, such as Promptable Segmentation and Video Object Segmentation, remain uncompromised. This is critical to deploying \ours{} in practical settings, obtaining a model that fully supports both geometric and visual prompts, by storing only the adapter weights.
+
+\subsection{Exploring Implicit Semantics in Traditional Video Object Segmentation Methods}
+Our hypothesis is that the class-agnostic training objective of Video Object Segmentation encourages the learning of semantically meaningful representations, even without category supervision. While our main analysis is focused on SAM2, which benefits from its large-scale pretraining, we investigate whether similar semantic understanding properties arise in traditional VOS trackers trained at smaller scale.
+
+To this end, we evaluate three representative VOS methods, AOT \cite{yang2021associating}, DeAOT \cite{yang2022decoupling}, and MAVOS \cite{shaker2024efficient}, alongside SAM2, on the COCO-20$^i$ 1-shot segmentation benchmark. As shown in \cref{tab:vos_tracker}, all models exhibit relatively weak performance when directly transferred to few-shot segmentation.
+We then apply our adaptation to each of these models, and evaluate them in the \textit{strict} FSS setting on COCO-20$^i$, \ie focusing on their ability to generalize to previously unseen classes.
+The results show a consistent behavior: despite their different training scales and capacities, all VOS models demonstrate a large performance gap between their frozen and adapted versions. For instance, MAVOS improves from 27.1\% to 52.3\% mIoU after adaptation, while SAM2 with Hiera-B improves from 28.0 \% to 55.4\%.
+The gap between these methods and \sam{}-B is attributable to its broader generalization capabilities, stemming from its diverse and large-scale pretraining.
+
+\input{tables/vos}
+
+This consistent behavior across models suggests that the VOS training paradigm inherently encourages the emergence of transferable semantic representations. In summary, our findings support the view that such semantic structure is an implicit property of the VOS objective itself, and that it can be effectively made \textit{explicit}, and successfully repurposed, for downstream semantic tasks.
+
+
+\section{Scalable and Fast Annotation}
+\label{sec:supp_scalable}
+While the previous sections have established the strong segmentation performance of \ours{} across benchmarks, a particularly compelling advantage of our approach is its ability to facilitate fast and scalable annotation in practical, real-world scenarios. In many applications, such as constructing new datasets or adapting models to novel domains, rapid annotation of large image collections without the need for fine-tuning on test categories is essential.
+
+To rigorously evaluate this capability, we simulate a large-scale annotation task on both the COCO-20$^i$ and LVIS-92$^i$ validation sets, mimicking a realistic deployment scenario in which new concepts must be annotated on the fly. For both datasets, we designate fold 0 as the test split, containing categories that are held out during training. Models are trained on the remaining folds. On COCO-20$^i$, we randomly sample 20 reference images, one per category in fold 0, and use them to guide the segmentation of 10,000 target images sampled from the same fold. On LVIS-92$^i$, which contains a larger and more fine-grained label space, we similarly sample 92 reference classes from fold 0 and use these to segment 10,000 target images. In both cases, the reference and target sets are fixed across all methods to ensure a fair comparison. Moreover, for all the methods, reference image features are computed once and cached, avoiding repeated backbone forward passes at inference time.
+
+\input{tables/annotation_time}
+
+We benchmark \ours{} against recent state-of-the-art few-shot segmentation methods, including GF-SAM \cite{zhang2024bridge}, SegIC \cite{meng2024segic}, and VRP-SAM \cite{sun2024vrp}, by measuring the total wall-clock time required to segment all 10,000 images and evaluating segmentation quality via mean Intersection-over-Union (mIoU) against ground truth masks. Results are summarized in \cref{tab:fast_annotation}.
+
+\ours{} achieves the best trade-off between speed and accuracy across both COCO and LVIS. In particular, it completes annotation 2--5$\times$ faster than competing approaches while maintaining the highest mIoU. On LVIS, where the label space is significantly more complex, the gains are more pronounced: \ours{} outperforms all baselines by a large margin (+8.7 mIoU over the best competitor), highlighting its strong generalization ability and annotation efficiency.
+
+
+\section{Baselines and Ablation Studies}
+\label{sec:supp_backbone}
+\subsection{Evaluating the Impact of SAM2 on Prior SAM-Based Pipelines}
+
+We analyze the effect of replacing SAM with SAM2 in existing Segment Anything-based methods, namely Matcher \cite{liu2023matcher}, GF-SAM \cite{zhang2024bridge}, and VRP-SAM \cite{sun2024vrp}. These methods follow a modular two-stage design: an external backbone (\textit{e.g.}, DINOv2 for Matcher and GF-SAM, ResNet-50 for VRP-SAM) is used to perform feature matching, and the matched features are then used to generate geometric prompts that are passed to SAM, which operates at the image level to predict the final segmentation mask.
+We re-evaluate these approaches by replacing SAM with SAM2 in the final segmentation step, while leaving the matching backbone unchanged. Note that all these methods adopt the largest version of SAM (SAM-H), hence we replace it with the largest \sam{} version (SAM2-L).  As shown in \cref{tab:baseline_sam2}, the performance differences are negligible.  This is consistent with findings from the SAM2 paper \cite{ravi2024sam}, which shows that SAM2-L yields only little gains over SAM-H in \textbf{image-level} promptable segmentation tasks. In other words, given the same prompts the segmentation quality is essentially unchanged, as both SAM and SAM2 excel at converting prompt geometry into accurate masks.
+
+\input{tables/sam_baseline}
+
+These findings highlight the fundamental difference between \ours{} and previous SAM-based approaches. While prior methods rely on external backbones for matching and treat SAM as a image-level decoder, our architecture tightly integrates all components into a unified pipeline. By leveraging \sam{} not only for mask prediction but also for feature matching and prompt encoding, \ours{} ensures more effective feature reuse, leading to stronger performance and improved computational efficiency.
+
+\subsection{Experiments with Different Backbones}
+In this section, we evaluate the performance of different SAM2 Encoder variants at varying scales. Table \ref{tab:model_comparison} presents a comparison of model parameters, inference speed (Frame Per Second), and mIoU across three versions of the model (Tiny, Base, and Large), with Frame Per Second (img/s) values computed on an NVIDIA RTX 4090. 
+
+\input{tables/different_backbones}
+
+All variants of \ours{} offer a favorable trade-off between efficiency and accuracy, with consistent gains in mIoU as model capacity increases. Notably, the Large model achieves the highest mIoU of 60.2\%, while still maintaining a practical inference speed of 15 FPS.
+
+\subsection{Effect of the Training Objective}
+\label{sec:loss_ablation}
+We next study the impact of our sequential conditioning objective. 
+When $J=1$, training reduces to the \textit{standard few-shot segmentation objective}, where each target is predicted only from the reference image, without propagation. In contrast, we propagate predictions across multiple \textit{unlabeled} targets ($J>1$), encouraging the model to extract semantic structure that generalizes beyond individual pairs.
+
+Table~\ref{tab:mask_propagation} shows that sequential conditioning consistently improves performance over the baseline with $J=1$. 
+We observe the largest gains with $J=3$--$4$, after which results plateau.
+
+\input{tables/ablation_loss}
+
+At inference, we emphasize that sequential conditioning is not used: each target is segmented independently given the annotated reference(s), following the standard few-shot segmentation protocol.
+
+
+
+\section{Additional Datasets and Qualitative Comparison}
+\label{sec:supp_qualitative}
+\subsection{Qualitative Comparison with Prior Methods}
+\cref{fig:qualitative_comparison} showcases the performance of SANSA compared to GF-SAM \cite{zhang2024bridge} and SegIC \cite{meng2024segic} on samples from the LVIS-92$^i$ benchmark. Each row visualizes a reference image with an annotated mask and the corresponding target image. We report predictions from the best-performing baselines (GF-SAM \cite{zhang2024bridge} and SegIC \cite{meng2024segic}), our approach (SANSA), and the ground truth segmentation. For clarity, the name of the queried object class is also provided (note, however, that none of the models have access to the class label during inference).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.99\linewidth]{images/qualitatives_comparison.pdf}
+    \caption{\textbf{Qualitative comparison on the LVIS-92$^i$ benchmark.} For each example, we show: the annotated reference, the target image, predictions from GF-SAM and SegIC, our SANSA prediction, and the ground truth. The queried class name is shown for clarity, but is not used by any model.}
+    \vspace{-0.4cm}
+\label{fig:qualitative_comparison}
+\end{figure}
+These examples illustrate \ours{} ability to resolve fine-grained distinctions and spatial part-awareness, addressing some of the core challenges of LVIS-92$^i$, where semantically close categories and partial object prompts are common. For instance, in the example where the reference depicts a \textit{lamb}, SANSA is able to distinguish it from the semantically similar \textit{sheep}. Similarly, it correctly segments a \textit{gazelle} while avoiding confusion with adjacent \textit{zebras}. In another case, SANSA successfully discriminates between a plush \textit{monkey} and a visually similar plush \textit{horse}, despite both being soft toys with overlapping colors and textures. Moreover, \ours{} exhibits part-level understanding. When prompted with a reference showing a \textit{t-shirt}, GF-SAM oversegments the full person, while SegIC narrowly restricts to clothing regions. In contrast, \ours{} accurately segments the t-shirt alone. These qualitative results complement our quantitative findings, further supporting our hypothesis that SANSA  bridges high-level category understanding with fine-grained spatial precision.
+
+
+\subsection{Additional Experiments: Pascal-5$^i$ and COCO $\rightarrow$ Pascal}
+While our main comparisons follow recent works \cite{meng2024segic, zhu2024unleashing, liu2023matcher} and focus on the benchmarks of COCO-20$^i$, LVIS-92$^i$, and FSS-1000, we additionally report results on Pascal-5$^i$ for completeness.
+
+\input{tables/pascal}
+
+These experiments are conducted in the strict few-shot setting and include both the standard evaluation on Pascal-5$^i$, and the distribution-shift setting, COCO$\rightarrow$Pascal, where models trained on COCO-20$^i$ are evaluated on 
+Pascal-5$^i$ with folds repurposed to avoid any class overlap, as proposed originally in \cite{boudiaf2021few}. This setup aims to assess the robustness of models to shifts in data distribution, a condition often encountered in practical applications where training and deployment domains may differ.
+In \cref{tab:pascal}, we compare with recent specialist few-shot methods (\eg, HMNet \cite{xu2025hybrid}, AENet \cite{xu2024eliminating}) and training-free methods employing two foundation models in cascade (\ie Matcher \cite{liu2023matcher}, GF-SAM \cite{zhang2024bridge}). For the latter, we report identical results in both evaluation settings, as these models are frozen and evaluated directly on Pascal-5$^i$ without any training.
+The results confirm the competitive results of \ours{} across benchmarks.
+
+
+
+
+\subsection{Promptable Segmentation: Prompt Generation Process and Qualitative Results}
+We denote the type of annotation as \( a^k_r \in \{ \texttt{mask, point, box, scribble} \} \). Following \cite{sun2024vrp, zou2023segment}, point-based reference prompts are generated by randomly sampling between 1 and 20 points from the ground truth (GT). Scribble-based prompts are obtained, consistently with \cite{sun2024vrp, zou2023segment}, by using the free-form training mask generation algorithm proposed in \cite{yu2019free}, producing 1 to 20 scribbles per sample. Box-based prompts are derived by extracting object bounding boxes from the GT annotations.
+
+In \cref{fig:supp_prompt}, we show the performance of \ours{} in \textbf{one-shot promptable segmentation}.  \ours{} yields consistent and robust results across various prompts, including points, boxes, and scribbles.
+
+
+\begin{figure*}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{images/supp_prompt_compr.pdf}
+\end{center}
+\caption{\textbf{Qualitative results for one-shot few-shot promptable segmentation.} The figure illustrates segmentation results using different types of prompts. The first row shows examples where the reference object is annotated with a point, the second row uses bounding box annotations, and the third row employs scribble-based annotations. Examples are extracted from COCO-20$^i$.} 
+\label{fig:supp_prompt}
+\end{figure*}
+
+\section{Exploratory Analysis: Negative Prompts}
+\label{sec:supp_negative}
+
+Segment Anything 2 supports the use of \emph{negative prompts} in interactive scenarios. These prompts, such as negative clicks on the image, allow users to correct mistakes by explicitly indicating regions that should not belong to the predicted mask. Since our method builds on SAM2, it is natural to ask whether this mechanism can be extended in the few-shot segmentation setting.  
+
+We conducted a small exploratory study to investigate this idea. We consider two ways of extending negative prompting:  
+
+\begin{itemize}[noitemsep,topsep=2pt,leftmargin=*]
+\item \textbf{Geometric negatives:} providing negative clicks on the target image at inference time, as in the interactive setting. This setup does not require any retraining and directly uses the mechanism already implemented in SAM2.  
+\item \textbf{Semantic negatives:} providing additional examples of visually similar but semantically different categories alongside the reference image, to serve as contrastive context (\textit{e.g.} including a photo of a horse to help disambiguate the target class zebra). We experimented with two simple variants:  
+\begin{itemize}[noitemsep,leftmargin=22pt]
+    \item \textit{Training-free:} the negative reference is added to the \texttt{Memory Bank} with an \textit{empty} mask.  
+    \item \textit{Training-based:} a small MLP maps the average feature of a negative object into a learnable negative token, similar to SAM2 handling of negative clicks.
+\end{itemize}
+\end{itemize}
+
+The results in Table~\ref{tab:negative_prompts} indicate that both geometric and semantic negative prompts can provide measurable benefits in few-shot segmentation. However, this should be regarded as an exploratory direction: in particular, semantic negative prompting currently lacks standardized baselines and evaluation protocols, but represents a promising extension of the few-shot setting for future work.
+
+
+\begin{table}[h]
+\centering
+\caption{\textbf{Exploratory results with negative prompts on COCO-20$^i$.} Geometric negatives act as test-time corrections. Semantic negatives provide contrastive context.}
+\vspace{6pt}
+\begin{tabular}{lc}
+\toprule
+Method & mIoU \\
+\midrule
+\ours{} (baseline) & 60.2 \\
+\midrule
+\multicolumn{2}{l}{\textit{Geometric Negative Prompts}} \\
+\quad +1 click & 60.8 \\
+\quad +3 clicks & 62.9 \\
+\quad +5 clicks & 64.5 \\
+\midrule
+\multicolumn{2}{l}{\textit{Semantic Negative Prompts}} \\
+\quad Training-free & 61.2 \\
+\quad Training-based & 63.0 \\
+\bottomrule
+\end{tabular}
+\label{tab:negative_prompts}
+\end{table}
+
+
+
+\subsection{Part Segmentation: Qualitative Results}
+In \textbf{one-shot part segmentation} (\cref{fig:supp_part}), \ours{} demonstrates strong abilities to retrieve fine-grained object parts, highlighting the effectiveness of our method in learning part-level representations. 
+
+\begin{figure*}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{images/supp_part_compr.pdf}
+\end{center}
+\caption{\textbf{Qualitative results for one-shot part segmentation.} Examples from Pascal-Part.} 
+\label{fig:supp_part}
+\end{figure*}
+
+\section{Exploring Dependence on Spatial Continuity in SAM2}
+\label{sec:supp_spatial_coherence}
+
+The SAM2 model targets is tracking in temporally coherent videos. However, its architecture imposes no prior on spatial continuity. As detailed in \cref{eq:mem_att}, masks are propagated across frames through a cross-attention between features, which allows all-to-all matching. Spatial coherence is thus not structurally enforced, but rather an emergent bias arising from pretraining on videos, encoded in the feature space. Our core finding is that this feature space contains latent semantic structure, entangled with spatial and appearance-related cues. Our adaptation disentangles these signals to isolate semantic information, enabling matching and segmentation across spatially independent inputs.
+
+A natural question is how this implicit spatial continuity bias affects SAM2 behavior in practice. To investigate this, we adopt the spatial coherence metric of \cite{zhang2023tale}, which computes the average first-order gradient of the displacement field induced by feature matching. Low values indicate smooth, object-consistent correspondences, while high values reflect noisy or fragmented matches. We evaluate three conditions with progressively weaker spatial relationships across image pairs:
+\begin{itemize}[noitemsep]
+    \item[(i)] Consecutive video frames from DAVIS ~\cite{perazzi2016benchmark}, where both temporal and spatial continuity are preserved.
+    \item[(ii)] Flipped DAVIS frames, where the second image is mirrored, disrupting spatial alignment while preserving object identity.
+    \item[(iii)] Independent images from TSS ~\cite{taniai2016joint}, with no spatial or temporal coherence.
+\end{itemize}
+
+
+As shown in Table~\ref{tab:spatial_coherence}, SAM2 performs well on natural videos as expected, but its coherence degrades when spatial alignment is perturbed and drops further on independent images. In contrast, SANSA maintains stable coherence across all scenarios, showing its ability to abstract semantic correspondences without relying on spatial continuity.
+
+\begin{table}[h]
+\centering
+\caption{\textbf{Spatial coherence across varying continuity conditions.} Lower is better.}
+\vspace{0.5em}
+\resizebox{0.8\linewidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+\multirow{2}{*}{Setting} & \multicolumn{2}{c}{Continuity} & \multirow{2}{*}{SAM2 ↓} & \multirow{2}{*}{SANSA ↓} \\
+\cmidrule(lr){2-3}
+ & Appearance & Spatial & & \\
+\midrule
+(i) Video frames (DAVIS)      & \checkmark & \checkmark & 1.5 & 1.7 \\
+(ii) Flipped frames (DAVIS)   & \checkmark & \xmark     & 5.5 & 2.1 \\
+(iii) Independent images (TSS)& \xmark     & \xmark     & 9.1 & 4.1 \\
+\bottomrule
+\end{tabular}}
+\label{tab:spatial_coherence}
+\end{table}
+
+
+\section{Implementation and Reproducibility}
+\label{sec:supp_implementation}
+
+\subsection{Implementation details}
+We provide full implementation details to support reproducibility.
+
+We adopt \ours{} with Hiera-Large \cite{ryali2023hiera} as the visual encoder. Hiera is a hierarchical Transformer with channel dimensions [144, 288, 576, 1152]. AdaptFormer \cite{chen2022adaptformer} adapters are inserted into the last two hierarchical blocks of the encoder (layers 9–48), corresponding to channel dimensions 1152 and 576. In the \textbf{strict few-shot setting}, the adapter hidden size is set to $0.3\times$ the block channel dimension, yielding hidden sizes of 346 (for 1152) and 173 (for 576). This configuration introduces about 10M trainable parameters, while all SAM2 weights remain frozen. In the \textbf{generalist setting}, the adapter hidden size is increased to $0.8\times$ the block channel dimension, which expands the adapters and raises the total number of trainable parameters to about 25M. Training in both settings is performed with AdamW (learning rate $10^{-4}$) and gradient clipping to 1.0. We train for 5 epochs in the strict setting and 20 epochs in the generalist setting, with a training sequence length of $J{=}3$. Supervision combines Binary Cross Entropy loss and Dice loss, equally weighted (1.0), applied to the predicted segmentation mask and ground truth. We train with batch size 32 on 8 A100 GPUs.
+
+For clarity, all relevant training and architecture details are summarized in \cref{tab:implementation-details}.
+
+\begin{table}[h]
+\centering
+\caption{\textbf{Summary of architecture and training hyperparameters.}}
+\vspace{0.5em}
+\begin{tabular}{ll}
+\toprule
+\textbf{Component} & \textbf{Value / Description} \\
+\midrule
+Base model & SAM2 (frozen) \\
+Visual encoder & Hiera-Large~\cite{ryali2023hiera} \\
+Adapter type & AdaptFormer~\cite{chen2022adaptformer} \\
+Adapted layers & Last two blocks (layers 9–48) \\
+Adapter hidden size & $0.3\times$ (strict) / $0.8\times$ (generalist) of block dim. \\
+Trainable parameters & $\sim$10M (strict) / $\sim$20M (generalist) \\
+Optimizer & Adam \\
+Learning rate & $10^{-4}$ \\
+Gradient clipping & 1.0 \\
+Batch size & 32 \\
+Training epochs & 5 (strict) / 20 (generalist) \\
+Training sequence length & $J=3$ \\
+Loss function & BCE (1.0) + Dice (1.0) \\
+\bottomrule
+\end{tabular}
+\label{tab:implementation-details}
+\end{table}
+
+\subsection{Clarification of Few-Shot Segmentation Evaluation Settings}
+To avoid ambiguity in terminology and evaluation protocols, we first clarify the conventions followed in our work.
+In traditional few-shot segmentation literature~\cite{li2021adaptive, wang2019panet, lang2022learning, liu2022learning, fan2022self}, the annotated image is typically referred to as the \textit{support} image, while the unannotated image to be segmented is called the \textit{query} image. However, more recent works~\cite{sun2024vrp, liu2023matcher, zhang2024bridge} have shifted terminology, denoting the annotated image as the \textit{reference}, and the image to be segmented as the \textit{target}. We adopt this updated nomenclature throughout our work.
+
+Beyond terminology, few-shot segmentation is commonly evaluated under two distinct settings: the strict few-shot setting and the more recent generalist in-context setting. We describe both below to clarify the assumptions and evaluation scope of our method.
+
+
+\myparagraph{Strict Few-Shot Segmentation}
+Early methods in few-shot segmentation~\cite{li2021adaptive, wang2019panet, lang2022learning, liu2022learning, fan2022self, wang2020few, zhang2021few, moon2023msi, Min_2021_ICCV, hong2022cost} adopt a meta-learning framework, where the goal is to segment novel object classes given only a few annotated examples. Training proceeds episodically: each episode samples a subset of classes from a predefined training set, along with labeled reference images and corresponding unlabeled target images. The model must then predict segmentation masks for target images that contain instances of the same classes shown in the support set. A key assumption of this setup is the strict separation between training (seen) and evaluation (unseen) classes. This constraint ensures that performance reflects a model ability to generalize to entirely novel categories. To emphasize this evaluation protocol, the setting has recently been referred to \cite{zhu2024unleashing, meng2024segic} as \textit{strict} few-shot segmentation.
+
+\myparagraph{Generalist in-context Setting}
+The notion of in-context learning was popularized in natural language processing by GPT-3~\cite{brown2020language}, where models perform new tasks by conditioning on a sequence of input-output examples, without parameter updates. Rather than being explicitly trained for a single task, these models learn to infer the intended behavior directly from the prompt structure, enabling flexible adaptation to a wide range of downstream tasks. Inspired by this idea, recent vision models such as SegGPT~\cite{wang2023seggpt} and Painter~\cite{wang2023images} reformulate segmentation as a conditional image generation problem. These models cast segmentation as a type of image-to-image translation or inpainting: prompts consist of paired inputs and output masks provided as images, and the model completes the target segmentation given these visual exemplars. This formulation allows generalization across a broad set of tasks, such as semantic, instance, and part segmentation, without retraining.
+
+Within few-shot segmentation literature, Matcher~\cite{liu2023matcher} builds on this paradigm and proposes the \textit{in-context setting}, where the model is prompted with examples and conditioned to produce the desired output. This formulation enables a single generalist model to address a wide spectrum of segmentation tasks, including few-shot segmentation, few-shot part segmentation, and video object segmentation. Several recent methods, including DiffewS~\cite{zhu2024unleashing}, SegIC~\cite{meng2024segic}, and our \ours{}, adopt this generalist perspective. These approaches operate in a more flexible evaluation regime, where prompts may include both seen and unseen classes, relaxing the disjoint class constraint of the strict setting.
+
+
+\subsection{Datasets}
+For strict few-shot segmentation, separate models are trained on COCO-20$^i$, LVIS-92$^i$ and FSS-1000 following their respective $k$-fold splits or fixed partitions. In contrast, the generalist in-context setting involves training a single model under three progressively more comprehensive configurations: a minimal setup with ADE20K and COCO; an extended setup including LVIS following SegIC~\cite{meng2024segic}; and a further extended configuration incorporating PACO, following ~\cite{wang2023seggpt, liu2024simple}, to mitigate object-level bias and improve part segmentation.
+Below, we provide brief descriptions of each dataset used in our experiments.
+
+\myparagraphnodot{COCO-20$^i$} \cite{nguyen2019feature} is constructed from the MSCOCO dataset \cite{lin2014microsoft}, containing 80 object categories split into four disjoint folds. Each fold includes 60 training classes and 20 test classes. This dataset provides a challenging setting due to its large-scale nature and diverse object appearances.
+
+\myparagraphnodot{LVIS-92$^i$}, introduced by Matcher \cite{liu2023matcher}, is derived from the LVIS dataset \cite{gupta2019lvis} and presents a more challenging few-shot segmentation benchmark, emphasizing long-tail distributions.  It consists of 920 classes that appear in at least two images, split into ten folds for cross-validation. This dataset introduces significant variations in object appearances and class distributions.
+
+\myparagraphnodot{FSS-1000} \cite{gao2022mutually} is a large-scale few-shot segmentation dataset containing 1,000 classes with pixel-wise annotations,  divided into 520 training, 240 validation, and 240 test classes. Unlike LVIS-92$^i$ and COCO-20$^i$, which use folds, FSS-1000 follows a fixed class partitioning.
+
+
+\myparagraphnodot{PASCAL-Part}, introduced by Matcher \cite{liu2023matcher}, is based on PASCAL VOC 2010 \cite{everingham2010pascal} and its part annotations released in \cite{chen2014detect} and provides fine-grained object part annotations. It consists of four superclasses: animals, indoor objects, persons, and vehicles. The dataset contains 56 object parts across 15 categories. Given its focus on object parts rather than whole objects, this dataset presents a challenging segmentation task.
+
+\myparagraphnodot{PACO-Part}, is derived from PACO,  which provides part annotations for 75 object categories. Matcher \cite{liu2023matcher} proposes a k-fold split of the 456 object part classes, from which 303 classes with at least two samples are retained. The dataset is split into four folds, each containing 76 object parts. Similar to PASCAL-Part, PACO-Part is designed for evaluating one-shot part segmentation models, but it includes a larger and more diverse set of categories.
+
+\myparagraphnodot{ADE20K} \cite{zhou2019semantic} is a large-scale semantic segmentation dataset containing 20,210 images annotated with 150 semantic categories at the pixel level. It includes a diverse range of indoor and outdoor scenes, covering natural landscapes, urban environments, and everyday objects. 

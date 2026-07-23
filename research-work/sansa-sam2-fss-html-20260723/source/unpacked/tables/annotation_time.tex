@@ -1,0 +1,17 @@
+\begin{table}[h]
+  \caption{\textbf{Evaluation of large-scale annotation efficiency on COCO-20$^i$ and LVIS-92$^i$ datasets.} We report mIoU and wall-clock annotation time (minutes) required to segment 10,000 target images using reference examples from unseen categories in fold 0. Reference features are precomputed and reused for fair comparison. Experiments conducted on an NVIDIA RTX 4090. \ours{} achieves the best trade-off between accuracy and speed, demonstrating strong generalization and efficiency.}
+  \vspace{3pt}
+  \centering
+  \begin{tabular}{lccc}
+    \toprule
+    \multirow{2}{*}{Method} & \multicolumn{2}{c}{Fold 0} & \multirow{2}{*}{Total Annotation Time ↓}  \\
+    \cmidrule{2-3} & COCO mIoU (\%) ↑ & LVIS mIoU (\%) ↑ &\\
+    \midrule
+    VRP-SAM \cite{sun2024vrp}   & 54.8 & 34.9 & 38 min \\
+    SegIC \cite{meng2024segic}  & 55.1 & 46.7 & 77 min \\
+    GF-SAM \cite{zhang2024bridge} & 59.7 & 38.4 & 58 min \\
+    \ours{} (\textbf{ours})                     & \textbf{61.2} & \textbf{55.4} & \textbf{16 min} \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:fast_annotation}
+\end{table}

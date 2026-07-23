@@ -1,0 +1,35 @@
+\begin{table*}
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+\caption{\textbf{Strict Few-Shot Segmentation setting}. Results for $k$-shot segmentation on LVIS-92$^i$, COCO-20$^i$, and FSS-1000. We include both specialist models and approaches based on foundation models, trained and tested on disjoint classes. Training-free methods are also reported for reference.}
+\begin{adjustbox}{width=0.9\linewidth}
+\begin{tabular}{llcr|cc|cc|cccccccc}
+\toprule
+\multirow{3}{*}{Method} & \multirow{3}{*}{Venue} & \multirow{3}{*}{Backbone} & \multirow{3}{*}{Params} & \multicolumn{6}{c}{\emph{few-shot segmentation}} \\
+& & & & \multicolumn{2}{c|}{LVIS-92$^i$} & \multicolumn{2}{c|}{COCO-20$^i$} & \multicolumn{2}{c}{FSS-1000} \\
+& & & & 1-shot & 5-shot & 1-shot & 5-shot & 1-shot & 5-shot  \\
+\midrule 
+\multicolumn{2}{l}{\emph{Training-free methods}} & &&&&&& \\
+~~SAM 2 \cite{ravi2024sam} & \puB{-} & \scriptsize{SAM2-L} &  224 M & 16.5 & 26.3 & 32.2 & 44.2 & 73.0 & 84.3 \\
+~~PerSAM \cite{zhang2023personalize} & \puB{ICLR'24} & \scriptsize{SAM-H} & 641 M &  11.5 & - & 23.0 & - & 71.2 & -  \\
+~~Matcher \cite{liu2023matcher} & \puB{ICLR'24} & \scriptsize{DINOv2-L+SAM-H} &  945 M & 33.0 & 40.0 & 52.7 & 60.7 & 87.0 & 89.6  \\
+~~GF-SAM \cite{zhang2024bridge} & \puB{NeurIPS'24} & \scriptsize{DINOv2-L+SAM-H} & 945 M & 35.2 & {44.2} & {58.7} & {66.8} & 88.0 & 88.9  \\
+\midrule
+
+\multicolumn{2}{l}{\emph{Strict $k$-shot segmentation}} &&&&&& \\
+~~AMFormer \cite{wang2023amf} & \puB{NeurIPS'23} & \small{ResNet101} & 49 M & - & - & 51.0 & 57.3 & - & -  \\
+~~HMNet \cite{xu2025hybrid} &\puB{NeurIPS'24} & \small{RN50} & 39 M & - & - & 52.1 & 58.9 & - & -  \\
+~~VRP-SAM \cite{sun2024vrp} & \puB{CVPR'24} & \small{RN50 + SAM-H} & 670 M &  28.3 & - & 53.9 & - & 87.7 &  - \\
+~~SegIC \cite{meng2024segic} & \puB{ECCV'24} & \small{DINOv2-G} & 1.2 B & {40.5} & - & 53.6 & - & 88.5 & -  \\
+
+~~DiffewS \cite{zhu2024unleashing} & \puB{NeurIPS'24} & \small{StableDiffusion} & 890 M & 33.9 & {43.7} & 52.2 & 60.7 & 90.2 & 90.6  \\
+~~\textbf{\ours{}} & \puB{NeurIPS'25} & \small{SAM2-L} & 234 M & \textbf{48.8} & \textbf{53.9} & \textbf{60.2} & \textbf{64.3} &   \textbf{91.4} & \textbf{92.1}   \\
+\bottomrule
+ 
+\end{tabular}
+\label{tab:strict_few_shot}
+\end{adjustbox}
+\end{center}
+\vspace{-0.5cm}
+\end{table*}
+
