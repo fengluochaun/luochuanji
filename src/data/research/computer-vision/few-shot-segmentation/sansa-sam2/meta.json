@@ -6,11 +6,11 @@
     "论文精读",
     "few-shot-segmentation",
     "SAM2",
-    "semantic-segmentation",
-    "computer-vision"
+    "adapter",
+    "semantic-correspondence"
   ],
   "source": "https://arxiv.org/abs/2505.21795",
   "topicTitle": "计算机视觉",
-  "seriesTitle": "小样本分割",
-  "importedAt": "2026-07-23T14:58:42.585Z"
+  "seriesTitle": "Few-Shot 分割",
+  "importedAt": "2026-07-24T13:05:40.512Z"
 }

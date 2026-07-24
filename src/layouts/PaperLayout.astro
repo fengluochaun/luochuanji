@@ -87,8 +87,32 @@ const siteHarmonizationCss = `
 .paper-root .metric .num { font-size: 26px; }
 .paper-root .metric { border-radius: 14px; }
 .paper-root section.card { border-radius: 16px; }
-.paper-root .hero, .paper-root .container { max-width: var(--app-width); }
-.paper-root section[id] { scroll-margin-top: 90px; }
+/* Match site notes: single column at --app-width, no paper-side TOC column */
+.paper-root .layout {
+  max-width: var(--app-width);
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding-inline: 0;
+  margin-inline: auto;
+}
+.paper-root nav.toc { display: none !important; }
+.paper-root .hero,
+.paper-root .container,
+.paper-root main {
+  max-width: var(--app-width);
+  margin-inline: auto;
+}
+.paper-root { max-width: var(--app-width); margin-inline: auto; }
+.paper-root section[id],
+.paper-root h2[id] { scroll-margin-top: 90px; }
+/* Academic deep-notes use section.card as plain blocks, not keynote cards */
+.paper-root section.card {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 2rem;
+}
 `;
 
 /**
@@ -179,17 +203,31 @@ const structuredData = {
 const contextLine = [topicTitle, seriesTitle].filter(Boolean).join(" · ");
 
 /**
- * Left TOC, extracted server-side from the imported markup. Every template
- * page wraps its major sections in `section.card[id]` with an `h2` title
- * (paper2html output contract), so this needs no per-page config and no
- * client-side parsing.
+ * Left TOC, extracted server-side from the imported markup.
+ * Prefer `section.card[id] > h2` (importer normalizes academic deep-notes
+ * into this shape). Fall back to bare `h2[id]` for older imports.
+ * Strip a leading "1. " so TocRail's 一二三 ordinals are the only index —
+ * deep-note headings already carry Arabic numbers in the title text.
  */
+const stripLeadingIndex = (title: string) =>
+  title.replace(/^\d+\.\s*/, "").trim();
+
 const tocItems = (() => {
   const $ = cheerio.load(contentHtml);
-  return $("section.card[id]")
+  const fromSections = $("section.card[id]")
     .map((_, el) => ({
       id: $(el).attr("id") ?? "",
-      title: $(el).find("h2").first().text().trim(),
+      title: stripLeadingIndex($(el).find("h2").first().text().trim()),
+    }))
+    .get()
+    .filter(item => item.id && item.title);
+
+  if (fromSections.length > 1) return fromSections;
+
+  return $("h2[id]")
+    .map((_, el) => ({
+      id: $(el).attr("id") ?? "",
+      title: stripLeadingIndex($(el).text().trim()),
     }))
     .get()
     .filter(item => item.id && item.title);
