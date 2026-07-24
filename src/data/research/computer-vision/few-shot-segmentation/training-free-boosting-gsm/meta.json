@@ -1,0 +1,17 @@
+{
+  "title": "GSM：Training-free 泛化语义挖掘增强 Few-Shot 分割",
+  "description": "AAAI-26 精读：Generalizing Semantic Mining（TSR+QSM+RR）在不训练前提下重写 affinity，为 TBS/Matcher/GF-SAM 等 affinity-based FSS 提供 plug-and-play 增益。",
+  "date": "2026-07-24",
+  "tags": [
+    "论文精读",
+    "few-shot-segmentation",
+    "training-free",
+    "affinity",
+    "SAM",
+    "GSM",
+    "AAAI2026"
+  ],
+  "topicTitle": "计算机视觉",
+  "seriesTitle": "Few-Shot 分割",
+  "importedAt": "2026-07-24T15:47:01.972Z"
+}
