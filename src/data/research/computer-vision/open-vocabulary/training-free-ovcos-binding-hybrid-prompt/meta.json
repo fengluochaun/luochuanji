@@ -1,0 +1,19 @@
+{
+  "title": "Training-Free OVCOS: Fine-Grained Object Binding & Adaptive Hybrid Prompt",
+  "description": "CVPR 2026 精读：training-free 开放词汇伪装目标分割——LLaVA OD/BD 语义探针 + Spearman 绑定 + EGTEA + AHPG→SAM",
+  "date": "2026-07-24",
+  "tags": [
+    "论文精读",
+    "OVCOS",
+    "training-free",
+    "CLIP",
+    "SAM",
+    "camouflaged-object-segmentation",
+    "open-vocabulary",
+    "CVPR2026"
+  ],
+  "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Ren_Training-Free_Open-Vocabulary_Camouflaged_Object_Segmentation_via_Fine-Grained_Object_Binding_and_CVPR_2026_paper.html",
+  "topicTitle": "计算机视觉",
+  "seriesTitle": "开放词汇分割",
+  "importedAt": "2026-07-24T12:13:50.248Z"
+}
